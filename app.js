@@ -815,49 +815,53 @@
     }
 
     loadFolders() {
+      const defaults = [
+        {
+          id: 1,
+          name: 'PROJELER',
+          color: 'col-red',
+          items: [
+            { id: 101, title: 'GitHub', url: 'https://github.com' },
+            { id: 102, title: 'Vercel', url: 'https://vercel.com' },
+            { id: 103, title: 'Figma', url: 'https://figma.com' }
+          ]
+        },
+        {
+          id: 2,
+          name: 'DERSLER',
+          color: 'col-blue',
+          items: [
+            { id: 201, title: 'MDN Web Docs', url: 'https://developer.mozilla.org' },
+            { id: 202, title: 'Stack Overflow', url: 'https://stackoverflow.com' }
+          ]
+        },
+        {
+          id: 3,
+          name: 'NOTLAR',
+          color: 'col-green',
+          items: [
+            { id: 301, title: 'Google Keep', url: 'https://keep.google.com' },
+            { id: 302, title: 'Notion', url: 'https://notion.so' }
+          ]
+        },
+        {
+          id: 4,
+          name: 'MEDYA',
+          color: 'col-yellow',
+          items: [
+            { id: 401, title: 'YouTube Lofi', url: 'https://youtube.com' },
+            { id: 402, title: 'Spotify', url: 'https://open.spotify.com' }
+          ]
+        }
+      ];
+
       try {
         const data = localStorage.getItem(this.storageKey);
-        return data ? JSON.parse(data) : [
-          {
-            id: 1,
-            name: 'PROJELER',
-            color: 'col-red',
-            items: [
-              { id: 101, title: 'GitHub', url: 'https://github.com' },
-              { id: 102, title: 'Vercel', url: 'https://vercel.com' },
-              { id: 103, title: 'Figma', url: 'https://figma.com' }
-            ]
-          },
-          {
-            id: 2,
-            name: 'DERSLER',
-            color: 'col-blue',
-            items: [
-              { id: 201, title: 'MDN Web Docs', url: 'https://developer.mozilla.org' },
-              { id: 202, title: 'Stack Overflow', url: 'https://stackoverflow.com' }
-            ]
-          },
-          {
-            id: 3,
-            name: 'NOTLAR',
-            color: 'col-green',
-            items: [
-              { id: 301, title: 'Google Keep', url: 'https://keep.google.com' },
-              { id: 302, title: 'Notion', url: 'https://notion.so' }
-            ]
-          },
-          {
-            id: 4,
-            name: 'MEDYA',
-            color: 'col-yellow',
-            items: [
-              { id: 401, title: 'YouTube Lofi', url: 'https://youtube.com' },
-              { id: 402, title: 'Spotify', url: 'https://open.spotify.com' }
-            ]
-          }
-        ];
+        if (!data) return defaults;
+        const parsed = JSON.parse(data);
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaults;
       } catch (err) {
-        return [];
+        return defaults;
       }
     }
 
@@ -1169,7 +1173,7 @@
     try {
       const soundEngine = new RetroSoundEngine();
       const mediaManager = new MediaFrameManager(soundEngine);
-      await mediaManager.init();
+      mediaManager.init().catch(err => console.warn('Media frame init deferred:', err));
 
       const todoManager = new TodoManager(soundEngine);
       new ShelfManager(soundEngine);

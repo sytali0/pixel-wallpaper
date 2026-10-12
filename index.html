@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixel Room Desktop - Lively Wallpaper</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
 
@@ -78,7 +78,27 @@
            ==================================================================== -->
       <div class="shelf-container" id="shelf-container">
         <div class="shelf-binders-wrapper" id="shelf-binders-wrapper">
-          <!-- Dinamik olarak JS tarafından piksel klasörler dizilir -->
+          <div class="pixel-binder col-red" data-folder-id="1" title="PROJELER (3 öğe)">
+            <div class="binder-label-tag"><span class="binder-label-text">PROJELER</span></div>
+            <div class="binder-ring"></div>
+            <div class="binder-tooltip">📁 PROJELER (3)</div>
+          </div>
+          <div class="pixel-binder col-blue" data-folder-id="2" title="DERSLER (2 öğe)">
+            <div class="binder-label-tag"><span class="binder-label-text">DERSLER</span></div>
+            <div class="binder-ring"></div>
+            <div class="binder-tooltip">📁 DERSLER (2)</div>
+          </div>
+          <div class="pixel-binder col-green" data-folder-id="3" title="NOTLAR (2 öğe)">
+            <div class="binder-label-tag"><span class="binder-label-text">NOTLAR</span></div>
+            <div class="binder-ring"></div>
+            <div class="binder-tooltip">📁 NOTLAR (2)</div>
+          </div>
+          <div class="pixel-binder col-yellow" data-folder-id="4" title="MEDYA (2 öğe)">
+            <div class="binder-label-tag"><span class="binder-label-text">MEDYA</span></div>
+            <div class="binder-ring"></div>
+            <div class="binder-tooltip">📁 MEDYA (2)</div>
+          </div>
+          <div class="shelf-add-binder-btn" id="btn-quick-add-binder" title="Rafa Yeni Klasör Ekle">+</div>
         </div>
         <!-- Ahşap Raf Tahtası ve Destek Ayakları -->
         <div class="shelf-board">
@@ -256,6 +276,6 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Uygulama Betiği -->
-  <script src="app.js"></script>
+  <script src="app.js?v=2.1"></script>
 </body>
 </html>

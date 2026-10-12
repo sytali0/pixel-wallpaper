@@ -56,10 +56,10 @@
   --trash-height: 15.0%;
 
   /* 5. DUVAR RAFI VE KLASÖRLER (Mantar Pano Altı) */
-  --shelf-top: 48.0%;
-  --shelf-left: 72.5%;
-  --shelf-width: 23.5%;
-  --shelf-height: 16.0%;
+  --shelf-top: 50.0%;
+  --shelf-left: 71.5%;
+  --shelf-width: 25.5%;
+  --shelf-height: 19.0%;
 
   /* Piksel Kenarlık Efektleri */
   --pixel-border: 3px solid var(--col-border-dark);
@@ -914,7 +914,7 @@ html, body {
   left: var(--shelf-left);
   width: var(--shelf-width);
   height: var(--shelf-height);
-  z-index: 15;
+  z-index: 25;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -928,76 +928,76 @@ html, body {
   align-items: flex-end;
   justify-content: flex-start;
   gap: 8px;
-  padding: 0 12px;
-  height: calc(100% - 10px);
-  z-index: 2;
+  padding: 0 10px;
+  height: calc(100% - 14px);
+  z-index: 4;
 }
 
 /* Piksel Klasör (Binder) */
 .pixel-binder {
   position: relative;
   flex: 1;
-  max-width: 44px;
-  min-width: 32px;
-  height: 92%;
+  max-width: 50px;
+  min-width: 36px;
+  height: 94%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 2px 4px 2px;
+  padding: 6px 3px 6px 3px;
   cursor: pointer;
-  border-radius: 2px 2px 0 0;
+  border-radius: 3px 3px 0 0;
   transition: transform 0.18s cubic-bezier(0.18, 0.89, 0.32, 1.28), filter 0.15s ease;
   user-select: none;
-  border: 2px solid #1a100b;
-  box-shadow: 2px 0 0 rgba(0, 0, 0, 0.35);
+  border: 3px solid #1a0f08;
+  box-shadow: 3px 0 0 rgba(0, 0, 0, 0.45);
 }
 
 /* Klasör Çekilme Animasyonu */
 .pixel-binder:hover {
-  transform: translateY(-12px);
-  filter: brightness(1.15);
-  z-index: 10;
+  transform: translateY(-14px);
+  filter: brightness(1.2);
+  z-index: 20;
 }
 
-/* Klasör Renk Temaları */
+/* Klasör Renk Temaları (Canlı & Belirgin 16-Bit Tonlar) */
 .pixel-binder.col-red {
-  background: #8b2628;
-  border-left: 2px solid #ba383b;
-  border-right: 2px solid #571618;
+  background: #d63031;
+  border-left: 3px solid #ff7675;
+  border-right: 3px solid #8f1213;
 }
 
 .pixel-binder.col-blue {
-  background: #1d4363;
-  border-left: 2px solid #2d6391;
-  border-right: 2px solid #102638;
+  background: #0984e3;
+  border-left: 3px solid #74b9ff;
+  border-right: 3px solid #064c84;
 }
 
 .pixel-binder.col-green {
-  background: #2a572c;
-  border-left: 2px solid #3c7d3f;
-  border-right: 2px solid #173319;
+  background: #00b894;
+  border-left: 3px solid #55efc4;
+  border-right: 3px solid #006853;
 }
 
 .pixel-binder.col-yellow {
-  background: #9c6c21;
-  border-left: 2px solid #c98e30;
-  border-right: 2px solid #573c12;
+  background: #e17055;
+  border-left: 3px solid #fab1a0;
+  border-right: 3px solid #8a3722;
 }
 
 .pixel-binder.col-purple {
-  background: #5a2a6b;
-  border-left: 2px solid #7d3d94;
-  border-right: 2px solid #33163d;
+  background: #6c5ce7;
+  border-left: 3px solid #a29bfe;
+  border-right: 3px solid #3c2eb5;
 }
 
 /* Klasör Sırtı Etiketi (Parchment Paper Label) */
 .binder-label-tag {
-  background: #f7eed3;
-  border: 1px solid #4a3429;
-  box-shadow: inset 1px 1px 0 #fff;
-  width: 82%;
-  padding: 2px 1px;
+  background: #fffbe6;
+  border: 2px solid #2a1810;
+  box-shadow: inset 1px 1px 0 #ffffff;
+  width: 90%;
+  padding: 3px 1px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1007,22 +1007,23 @@ html, body {
 
 .binder-label-text {
   font-family: var(--font-pixel);
-  font-size: 0.45rem;
-  color: #2b1f1d;
+  font-size: 0.5rem;
+  color: #1a0f08;
   line-height: 1;
   text-transform: uppercase;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: bold;
 }
 
 /* Klasör Metal Çekme Halkası */
 .binder-ring {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  border: 2px solid #8e949c;
-  background: #2b2b2b;
+  border: 2px solid #e0e4e8;
+  background: #2b2e36;
   box-shadow: inset 1px 1px 0 #fff;
   margin-top: auto;
   margin-bottom: 2px;
@@ -1031,21 +1032,21 @@ html, body {
 /* Klasör Hover Bilgi İpucu */
 .binder-tooltip {
   position: absolute;
-  top: -30px;
+  top: -34px;
   left: 50%;
   transform: translateX(-50%) translateY(4px);
   background: var(--col-bg-dark);
   color: var(--col-accent-yellow);
   font-family: var(--font-pixel);
-  font-size: 0.5rem;
-  padding: 3px 6px;
+  font-size: 0.55rem;
+  padding: 4px 8px;
   border: var(--pixel-border);
   box-shadow: var(--pixel-shadow);
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
   transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-  z-index: 20;
+  z-index: 30;
 }
 
 .pixel-binder:hover .binder-tooltip {
@@ -1055,57 +1056,62 @@ html, body {
 
 /* Yeni Klasör Ekle Butonu / Raf Desteği */
 .shelf-add-binder-btn {
-  width: 24px;
-  height: 60%;
-  border: 2px dashed rgba(248, 197, 58, 0.6);
-  background: rgba(40, 25, 18, 0.5);
+  width: 28px;
+  height: 65%;
+  border: 2px dashed #f8c53a;
+  background: rgba(30, 18, 12, 0.7);
   color: var(--col-accent-yellow);
   font-family: var(--font-pixel);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.15s ease;
-  border-radius: 2px 2px 0 0;
+  border-radius: 3px 3px 0 0;
 }
 
 .shelf-add-binder-btn:hover {
-  background: rgba(248, 197, 58, 0.25);
-  border-color: var(--col-accent-yellow);
-  transform: scale(1.08);
+  background: rgba(248, 197, 58, 0.35);
+  border-color: #ffffff;
+  transform: scale(1.1);
 }
 
-/* Ahşap Raf Tahtası (Wood Board) */
+/* Ahşap Raf Tahtası (Masif Meşe Ağacı / Vurgulu Raf) */
 .shelf-board {
   position: relative;
   width: 100%;
-  height: 10px;
-  background: #502c1a;
-  border-top: 2px solid #854b2b;
-  border-bottom: 2px solid #29140b;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.55);
-  z-index: 3;
+  height: 14px;
+  background: linear-gradient(to bottom, #d07a38 0%, #a25220 35%, #682e0e 100%);
+  border-top: 3px solid #fca35d;
+  border-bottom: 3px solid #240f05;
+  border-left: 3px solid #fca35d;
+  border-right: 3px solid #240f05;
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.75),
+    inset 0 2px 0 rgba(255, 255, 255, 0.25);
+  z-index: 5;
 }
 
-/* Ahşap Raf Demir/Ahşap Destek Ayakları (Brackets) */
+/* Ahşap/Demir Raf Destek Ayakları (Brackets) */
 .shelf-bracket {
   position: absolute;
-  bottom: -10px;
-  width: 10px;
-  height: 10px;
-  background: #2b1810;
-  border-left: 2px solid #1a0f0a;
-  border-bottom: 2px solid #1a0f0a;
+  bottom: -16px;
+  width: 16px;
+  height: 16px;
+  background: #1b1c20;
+  border-left: 2px solid #4a4e5a;
+  border-bottom: 2px solid #0f1014;
   clip-path: polygon(0 0, 100% 0, 0 100%);
+  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.6));
 }
 
 .shelf-bracket.left {
-  left: 12%;
+  left: 10%;
 }
 
 .shelf-bracket.right {
-  right: 12%;
+  right: 10%;
   transform: scaleX(-1);
 }
 
