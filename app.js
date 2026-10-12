@@ -105,6 +105,39 @@
             osc.stop(now + 0.12);
             break;
 
+          case 'camera':
+            // Fotoğraf makinesi deklanşör sesi
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(120, now + 0.08);
+            gain.gain.setValueAtTime(0.09, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.start(now);
+            osc.stop(now + 0.12);
+            break;
+
+          case 'clock':
+            // Masa saati tik-tok sesi
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1000, now);
+            osc.frequency.setValueAtTime(600, now + 0.04);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.08);
+            break;
+
+          case 'rustle':
+            // Sarmaşık yaprak hışırtısı
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(160, now);
+            osc.frequency.linearRampToValueAtTime(320, now + 0.08);
+            gain.gain.setValueAtTime(0.03, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+            osc.start(now);
+            osc.stop(now + 0.14);
+            break;
+
           case 'delete':
             // Tekil silme sesi
             osc.type = 'square';
@@ -144,13 +177,14 @@
   }
 
   /* ==========================================================================
-     3. İNDEKS VERİTABANI (INDEXED DB) - MEDYA KALICILIĞI
+     3. İNDEKS VERİTABANI (INDEXED DB) - MEDYA & PC DOSYALARI KALICILIĞI
      ========================================================================== */
   class MediaStorage {
     constructor() {
       this.dbName = 'PixelWallpaperDB';
-      this.dbVersion = 1;
+      this.dbVersion = 2; // Sürüm 2: Klasör PC dosyaları desteği
       this.storeName = 'mediaFiles';
+      this.folderStoreName = 'folderFiles';
       this.db = null;
       this.currentObjectUrl = null;
     }
@@ -163,6 +197,10 @@
           const db = e.target.result;
           if (!db.objectStoreNames.contains(this.storeName)) {
             db.createObjectStore(this.storeName, { keyPath: 'id' });
+          }
+          if (!db.objectStoreNames.contains(this.folderStoreName)) {
+            const fStore = db.createObjectStore(this.folderStoreName, { keyPath: 'id' });
+            fStore.createIndex('folderId', 'folderId', { unique: false });
           }
         };
 
@@ -236,6 +274,62 @@
         URL.revokeObjectURL(this.currentObjectUrl);
         this.currentObjectUrl = null;
       }
+    }
+
+    // --- KLASÖR İÇİ PC DOSYALARI (INDEXED DB) ---
+    async saveFolderFile(folderId, file) {
+      if (!this.db) await this.init();
+      return new Promise((resolve, reject) => {
+        const tx = this.db.transaction([this.folderStoreName], 'readwrite');
+        const store = tx.objectStore(this.folderStoreName);
+        const record = {
+          id: 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          folderId: String(folderId),
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          fileBlob: file,
+          createdAt: Date.now()
+        };
+        const req = store.put(record);
+        req.onsuccess = () => resolve(record);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async getFolderFiles(folderId) {
+      if (!this.db) await this.init();
+      return new Promise((resolve, reject) => {
+        const tx = this.db.transaction([this.folderStoreName], 'readonly');
+        const store = tx.objectStore(this.folderStoreName);
+        const index = store.index('folderId');
+        const req = index.getAll(String(folderId));
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async deleteFolderFile(fileId) {
+      if (!this.db) await this.init();
+      return new Promise((resolve, reject) => {
+        const tx = this.db.transaction([this.folderStoreName], 'readwrite');
+        const store = tx.objectStore(this.folderStoreName);
+        const req = store.delete(fileId);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async clearFolderFiles(folderId) {
+      const files = await this.getFolderFiles(folderId);
+      if (!files.length) return 0;
+      return new Promise((resolve, reject) => {
+        const tx = this.db.transaction([this.folderStoreName], 'readwrite');
+        const store = tx.objectStore(this.folderStoreName);
+        files.forEach(f => store.delete(f.id));
+        tx.oncomplete = () => resolve(files.length);
+        tx.onerror = () => reject(tx.error);
+      });
     }
   }
 
@@ -726,304 +820,407 @@
   }
 
   /* ==========================================================================
-     8. DUVAR RAFI VE PİKSEL KLASÖRLER YÖNETİCİSİ (SHELF & BINDERS)
+     8. DUVAR RAFI VE KLASÖR / PC DOSYA YÖNETİCİSİ (SHELF & PC FILES)
      ========================================================================== */
   class ShelfManager {
-    constructor(soundEngine) {
+    constructor(soundEngine, mediaStorage) {
       this.sound = soundEngine;
-      this.storageKey = 'pixel_shelf_folders';
-      this.folders = this.loadFolders();
-      this.activeFolderId = null;
+      this.storage = mediaStorage;
+      this.activeFolderKey = 'projeler';
+      this.activeTab = 'pc'; // 'pc' veya 'web'
 
-      this.wrapper = document.getElementById('shelf-binders-wrapper');
-      
-      // Klasör İçeriği Modalı
+      // Klasör Tanımları
+      this.folderMeta = {
+        'projeler': { title: '📁 PROJELER (Kırmızı Klasör)', name: 'Projeler' },
+        'dersler':  { title: '📁 DERSLER & KAYNAKLAR (Yeşil Klasör)', name: 'Dersler' },
+        'notlar':   { title: '📁 NOTLAR & BELGELER (Mavi Klasör)', name: 'Notlar' },
+        'arsiv':    { title: '📚 KİŞİSEL ARŞİV & KİTAPLAR (Kitap Seti)', name: 'Arşiv' }
+      };
+
+      // Modal Elemanları
       this.modal = document.getElementById('folder-modal');
       this.modalTitle = document.getElementById('folder-modal-title');
       this.modalClose = document.getElementById('folder-modal-close-btn');
-      this.itemsGrid = document.getElementById('folder-items-grid');
-      this.itemForm = document.getElementById('folder-item-form');
-      this.itemTitleInput = document.getElementById('folder-item-title');
-      this.itemUrlInput = document.getElementById('folder-item-url');
-      this.btnDeleteFolder = document.getElementById('btn-delete-folder');
 
-      // Yeni Klasör Ekleme Modalı
-      this.addModal = document.getElementById('add-binder-modal');
-      this.addModalClose = document.getElementById('add-binder-close-btn');
-      this.newBinderForm = document.getElementById('new-binder-form');
-      this.newBinderName = document.getElementById('new-binder-name');
-      this.newBinderColor = document.getElementById('new-binder-color');
+      // Sekmeler
+      this.tabBtnPc = document.getElementById('tab-btn-pc');
+      this.tabBtnWeb = document.getElementById('tab-btn-web');
+      this.panelPc = document.getElementById('panel-pc-files');
+      this.panelWeb = document.getElementById('panel-web-links');
+      this.pcCount = document.getElementById('pc-files-count');
+      this.webCount = document.getElementById('web-links-count');
+
+      // PC Dosya Elemanları
+      this.dropZone = document.getElementById('folder-drop-zone');
+      this.fileInput = document.getElementById('folder-file-input');
+      this.btnBrowse = document.getElementById('btn-browse-pc-files');
+      this.pcFileList = document.getElementById('folder-pc-files-list');
+
+      // Web Link Elemanları
+      this.webGrid = document.getElementById('folder-items-grid');
+      this.linkForm = document.getElementById('folder-item-form');
+      this.linkTitle = document.getElementById('folder-item-title');
+      this.linkUrl = document.getElementById('folder-item-url');
+      this.btnClearAll = document.getElementById('btn-clear-folder-content');
+
+      // Flaş Efekti
+      this.cameraFlash = document.getElementById('camera-flash');
 
       this.init();
     }
 
     init() {
-      // Modal Kapatma Olayları
-      this.modalClose.addEventListener('click', () => this.closeFolderModal());
-      this.modal.addEventListener('click', (e) => {
-        if (e.target === this.modal) this.closeFolderModal();
+      this.bindShelfHotspots();
+      this.bindModalEvents();
+      this.bindPcFileEvents();
+      this.bindWebLinkEvents();
+    }
+
+    bindShelfHotspots() {
+      // 1. Klasörler ve Kitaplar
+      document.querySelectorAll('.shelf-hotspot[data-folder]').forEach(hotspot => {
+        hotspot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const folderKey = hotspot.getAttribute('data-folder');
+          this.sound.play('slide');
+          this.openFolder(folderKey);
+        });
       });
 
-      this.addModalClose.addEventListener('click', () => this.closeAddModal());
-      this.addModal.addEventListener('click', (e) => {
-        if (e.target === this.addModal) this.closeAddModal();
+      // 2. Sarmaşık Bitki
+      const plant = document.getElementById('hotspot-plant');
+      if (plant) {
+        plant.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.play('rustle');
+          ToastManager.show('🌿 Sarmaşık yaprakları kıpırdadı!');
+        });
+      }
+
+      // 3. Masa Saati
+      const clock = document.getElementById('hotspot-clock');
+      if (clock) {
+        clock.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.play('clock');
+          const timeStr = new Date().toLocaleTimeString('tr-TR');
+          ToastManager.show(`⏰ Anlık Saat: ${timeStr}`);
+        });
+      }
+
+      // 4. Retro Fotoğraf Makinesi
+      const camera = document.getElementById('hotspot-camera');
+      if (camera) {
+        camera.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.play('camera');
+          if (this.cameraFlash) {
+            this.cameraFlash.classList.add('active');
+            setTimeout(() => this.cameraFlash.classList.remove('active'), 120);
+          }
+          ToastManager.show('📸 Hatıra fotoğrafı çekildi!');
+        });
+      }
+    }
+
+    bindModalEvents() {
+      this.modalClose.addEventListener('click', () => this.closeModal());
+      this.modal.addEventListener('click', (e) => {
+        if (e.target === this.modal) this.closeModal();
       });
 
       window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          this.closeFolderModal();
-          this.closeAddModal();
+        if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+          this.closeModal();
         }
       });
 
-      // Klasöre Yeni Bağlantı Ekleme
-      this.itemForm.addEventListener('submit', (e) => {
+      // Sekme Değişimi
+      this.tabBtnPc.addEventListener('click', () => this.switchTab('pc'));
+      this.tabBtnWeb.addEventListener('click', () => this.switchTab('web'));
+
+      // Tümünü Temizle Butonu
+      this.btnClearAll.addEventListener('click', async () => {
+        const confirmed = confirm(`"${this.folderMeta[this.activeFolderKey].name}" klasöründeki tüm dosya ve bağlantıları temizlemek istediğinize emin misiniz?`);
+        if (confirmed) {
+          await this.storage.clearFolderFiles(this.activeFolderKey);
+          localStorage.removeItem(`pixel_links_${this.activeFolderKey}`);
+          this.sound.play('trash');
+          await this.renderFolderContent();
+          ToastManager.show('Klasör içeriği temizlendi');
+        }
+      });
+    }
+
+    bindPcFileEvents() {
+      // Dosya Seçme Butonu
+      this.btnBrowse.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.fileInput.click();
+      });
+
+      this.fileInput.addEventListener('change', async (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          await this.handleUploadFiles(files);
+          this.fileInput.value = '';
+        }
+      });
+
+      // Sürükle ve Bırak
+      ['dragenter', 'dragover'].forEach(eventType => {
+        this.dropZone.addEventListener(eventType, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.dropZone.classList.add('dragover');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(eventType => {
+        this.dropZone.addEventListener(eventType, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.dropZone.classList.remove('dragover');
+        });
+      });
+
+      this.dropZone.addEventListener('drop', async (e) => {
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length > 0) {
+          await this.handleUploadFiles(files);
+        }
+      });
+    }
+
+    bindWebLinkEvents() {
+      this.linkForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const title = this.itemTitleInput.value.trim();
-        let url = this.itemUrlInput.value.trim();
-        if (title && url && this.activeFolderId) {
+        const title = this.linkTitle.value.trim();
+        let url = this.linkUrl.value.trim();
+        if (title && url) {
           if (!/^https?:\/\//i.test(url)) {
             url = 'https://' + url;
           }
-          this.addItemToFolder(this.activeFolderId, title, url);
-          this.itemTitleInput.value = '';
-          this.itemUrlInput.value = '';
+          this.addWebLink(title, url);
+          this.linkTitle.value = '';
+          this.linkUrl.value = '';
         }
       });
-
-      // Klasörü Silme Butonu
-      this.btnDeleteFolder.addEventListener('click', () => {
-        if (this.activeFolderId) {
-          this.deleteFolder(this.activeFolderId);
-          this.closeFolderModal();
-        }
-      });
-
-      // Rafa Yeni Klasör Ekleme Formu
-      this.newBinderForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = this.newBinderName.value.trim().toUpperCase();
-        const color = this.newBinderColor.value;
-        if (name) {
-          this.addFolder(name, color);
-          this.newBinderName.value = '';
-          this.closeAddModal();
-        }
-      });
-
-      this.renderShelf();
     }
 
-    loadFolders() {
-      const defaults = [
-        {
-          id: 1,
-          name: 'PROJELER',
-          color: 'col-red',
-          items: [
-            { id: 101, title: 'GitHub', url: 'https://github.com' },
-            { id: 102, title: 'Vercel', url: 'https://vercel.com' },
-            { id: 103, title: 'Figma', url: 'https://figma.com' }
-          ]
-        },
-        {
-          id: 2,
-          name: 'DERSLER',
-          color: 'col-blue',
-          items: [
-            { id: 201, title: 'MDN Web Docs', url: 'https://developer.mozilla.org' },
-            { id: 202, title: 'Stack Overflow', url: 'https://stackoverflow.com' }
-          ]
-        },
-        {
-          id: 3,
-          name: 'NOTLAR',
-          color: 'col-green',
-          items: [
-            { id: 301, title: 'Google Keep', url: 'https://keep.google.com' },
-            { id: 302, title: 'Notion', url: 'https://notion.so' }
-          ]
-        },
-        {
-          id: 4,
-          name: 'MEDYA',
-          color: 'col-yellow',
-          items: [
-            { id: 401, title: 'YouTube Lofi', url: 'https://youtube.com' },
-            { id: 402, title: 'Spotify', url: 'https://open.spotify.com' }
-          ]
-        }
-      ];
-
-      try {
-        const data = localStorage.getItem(this.storageKey);
-        if (!data) return defaults;
-        const parsed = JSON.parse(data);
-        return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaults;
-      } catch (err) {
-        return defaults;
+    switchTab(tab) {
+      this.activeTab = tab;
+      this.sound.play('blip');
+      if (tab === 'pc') {
+        this.tabBtnPc.classList.add('active');
+        this.tabBtnWeb.classList.remove('active');
+        this.panelPc.style.display = 'block';
+        this.panelWeb.style.display = 'none';
+      } else {
+        this.tabBtnWeb.classList.add('active');
+        this.tabBtnPc.classList.remove('active');
+        this.panelWeb.style.display = 'block';
+        this.panelPc.style.display = 'none';
       }
     }
 
-    saveFolders() {
-      try {
-        localStorage.setItem(this.storageKey, JSON.stringify(this.folders));
-      } catch (err) {
-        console.error('Klasörler kaydedilemedi:', err);
-      }
-      this.renderShelf();
-    }
-
-    renderShelf() {
-      if (!this.wrapper) return;
-      this.wrapper.innerHTML = '';
-
-      this.folders.forEach(folder => {
-        const binder = document.createElement('div');
-        binder.className = `pixel-binder ${folder.color || 'col-red'}`;
-        binder.title = `${folder.name} (${folder.items ? folder.items.length : 0} öğe)`;
-
-        binder.innerHTML = `
-          <div class="binder-label-tag">
-            <span class="binder-label-text">${folder.name}</span>
-          </div>
-          <div class="binder-ring"></div>
-          <div class="binder-tooltip">📁 ${folder.name} (${folder.items ? folder.items.length : 0})</div>
-        `;
-
-        binder.addEventListener('click', () => {
-          this.sound.play('slide');
-          this.openFolder(folder.id);
-        });
-
-        this.wrapper.appendChild(binder);
-      });
-
-      // + Yeni Klasör Ekle Butonu
-      const btnAdd = document.createElement('div');
-      btnAdd.className = 'shelf-add-binder-btn';
-      btnAdd.title = 'Rafa Yeni Klasör Ekle';
-      btnAdd.textContent = '+';
-      btnAdd.addEventListener('click', () => {
-        this.sound.play('blip');
-        this.openAddModal();
-      });
-      this.wrapper.appendChild(btnAdd);
-    }
-
-    openFolder(folderId) {
-      const folder = this.folders.find(f => f.id === folderId);
-      if (!folder) return;
-      this.activeFolderId = folderId;
-
-      this.modalTitle.textContent = `📁 KLASÖR: ${folder.name} (${folder.items ? folder.items.length : 0})`;
-      this.renderFolderItems();
+    async openFolder(folderKey) {
+      this.activeFolderKey = folderKey || 'projeler';
+      const meta = this.folderMeta[this.activeFolderKey] || { title: '📁 KLASÖR' };
+      this.modalTitle.textContent = meta.title;
+      this.switchTab('pc');
+      await this.renderFolderContent();
       this.modal.classList.add('active');
     }
 
-    closeFolderModal() {
+    closeModal() {
       this.modal.classList.remove('active');
-      this.activeFolderId = null;
     }
 
-    openAddModal() {
-      this.addModal.classList.add('active');
+    async handleUploadFiles(files) {
+      try {
+        for (const file of files) {
+          await this.storage.saveFolderFile(this.activeFolderKey, file);
+        }
+        this.sound.play('add');
+        ToastManager.show(`💾 ${files.length} adet dosya klasöre kaydedildi!`);
+        await this.renderPcFiles();
+      } catch (err) {
+        console.error('Dosya kaydetme hatası:', err);
+        ToastManager.show('Dosya kaydedilemedi!');
+      }
     }
 
-    closeAddModal() {
-      this.addModal.classList.remove('active');
+    async renderFolderContent() {
+      await this.renderPcFiles();
+      this.renderWebLinks();
     }
 
-    renderFolderItems() {
-      const folder = this.folders.find(f => f.id === this.activeFolderId);
-      if (!folder) return;
+    async renderPcFiles() {
+      this.pcFileList.innerHTML = '';
+      const files = await this.storage.getFolderFiles(this.activeFolderKey);
+      this.pcCount.textContent = files.length;
 
-      this.itemsGrid.innerHTML = '';
-
-      if (!folder.items || folder.items.length === 0) {
-        this.itemsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #777; font-style: italic; padding: 12px 0;">Bu klasör henüz boş...</div>';
+      if (!files || files.length === 0) {
+        this.pcFileList.innerHTML = '<div style="text-align: center; color: #888; font-style: italic; padding: 14px 0;">Bu klasörde henüz PC dosyası yok. Yukarıdan sürükleyip bırakabilirsiniz.</div>';
         return;
       }
 
-      folder.items.forEach(item => {
+      files.forEach(file => {
+        const item = document.createElement('div');
+        item.className = 'pc-file-item';
+
+        const ext = file.name.split('.').pop().toLowerCase();
+        let icon = '📄';
+        if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext)) icon = '🖼️';
+        else if (['mp4', 'webm', 'mov', 'mkv'].includes(ext)) icon = '🎬';
+        else if (['mp3', 'wav', 'ogg'].includes(ext)) icon = '🎵';
+        else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) icon = '📦';
+        else if (['js', 'html', 'css', 'py', 'json', 'ts', 'cpp', 'c', 'cs'].includes(ext)) icon = '💻';
+        else if (['pdf'].includes(ext)) icon = '📕';
+
+        const sizeFormatted = file.size > 1024 * 1024
+          ? (file.size / (1024 * 1024)).toFixed(1) + ' MB'
+          : (file.size / 1024).toFixed(0) + ' KB';
+
+        item.innerHTML = `
+          <div class="pc-file-info">
+            <span style="font-size: 1.2rem;">${icon}</span>
+            <div>
+              <div class="pc-file-name" title="${file.name}">${file.name}</div>
+              <div class="pc-file-size">${sizeFormatted}</div>
+            </div>
+          </div>
+          <div class="pc-file-actions">
+            <button class="file-action-btn btn-open" title="Görüntüle / Aç">AÇ</button>
+            <button class="file-action-btn btn-dl" title="Bilgisayara İndir">İNDİR</button>
+            <button class="file-action-btn del btn-del" title="Sil">✕</button>
+          </div>
+        `;
+
+        // Aç Butonu
+        item.querySelector('.btn-open').addEventListener('click', () => {
+          this.sound.play('blip');
+          const fileUrl = URL.createObjectURL(file.fileBlob);
+          window.open(fileUrl, '_blank');
+        });
+
+        // İndir Butonu
+        item.querySelector('.btn-dl').addEventListener('click', () => {
+          this.sound.play('done');
+          const fileUrl = URL.createObjectURL(file.fileBlob);
+          const a = document.createElement('a');
+          a.href = fileUrl;
+          a.download = file.name;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(fileUrl), 1000);
+        });
+
+        // Sil Butonu
+        item.querySelector('.btn-del').addEventListener('click', async () => {
+          this.sound.play('delete');
+          await this.storage.deleteFolderFile(file.id);
+          ToastManager.show(`"${file.name.slice(0, 16)}..." silindi`);
+          await this.renderPcFiles();
+        });
+
+        this.pcFileList.appendChild(item);
+      });
+    }
+
+    loadWebLinks() {
+      const storageKey = `pixel_links_${this.activeFolderKey}`;
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved) return JSON.parse(saved);
+
+        // Varsayılan Bağlantılar
+        const defaults = {
+          'projeler': [
+            { id: 1, title: 'GitHub Profilim', url: 'https://github.com' },
+            { id: 2, title: 'Vercel Dashboard', url: 'https://vercel.com' }
+          ],
+          'dersler': [
+            { id: 3, title: 'MDN Web Docs', url: 'https://developer.mozilla.org' },
+            { id: 4, title: 'Stack Overflow', url: 'https://stackoverflow.com' }
+          ],
+          'notlar': [
+            { id: 5, title: 'Google Keep', url: 'https://keep.google.com' },
+            { id: 6, title: 'Notion Çalışma Alanı', url: 'https://notion.so' }
+          ],
+          'arsiv': [
+            { id: 7, title: 'Wikipedia Türkçe', url: 'https://tr.wikipedia.org' },
+            { id: 8, title: 'Internet Archive', url: 'https://archive.org' }
+          ]
+        };
+
+        return defaults[this.activeFolderKey] || [];
+      } catch (err) {
+        return [];
+      }
+    }
+
+    saveWebLinks(links) {
+      const storageKey = `pixel_links_${this.activeFolderKey}`;
+      localStorage.setItem(storageKey, JSON.stringify(links));
+      this.renderWebLinks();
+    }
+
+    renderWebLinks() {
+      this.webGrid.innerHTML = '';
+      const links = this.loadWebLinks();
+      this.webCount.textContent = links.length;
+
+      if (!links || links.length === 0) {
+        this.webGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #888; font-style: italic; padding: 12px 0;">Henüz web bağlantısı eklenmemiş.</div>';
+        return;
+      }
+
+      links.forEach(link => {
         const card = document.createElement('a');
         card.className = 'shortcut-card';
-        card.href = item.url;
+        card.href = link.url;
         card.target = '_blank';
         card.rel = 'noopener noreferrer';
 
         card.innerHTML = `
-          <div class="shortcut-icon">📄</div>
+          <div class="shortcut-icon">🔗</div>
           <div class="shortcut-info">
-            <span class="shortcut-name">${item.title}</span>
-            <span class="shortcut-desc">${item.url.replace(/^https?:\/\//i, '').slice(0, 22)}</span>
+            <span class="shortcut-name">${link.title}</span>
+            <span class="shortcut-desc">${link.url.replace(/^https?:\/\//i, '').slice(0, 24)}</span>
           </div>
         `;
 
         const btnDel = document.createElement('button');
         btnDel.className = 'shortcut-delete-btn';
         btnDel.textContent = '✕';
-        btnDel.title = 'Öğeyi Sil';
+        btnDel.title = 'Sil';
         btnDel.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          this.deleteItemFromFolder(this.activeFolderId, item.id);
+          this.deleteWebLink(link.id);
         });
 
         card.appendChild(btnDel);
-        this.itemsGrid.appendChild(card);
+        this.webGrid.appendChild(card);
       });
     }
 
-    addItemToFolder(folderId, title, url) {
-      const folder = this.folders.find(f => f.id === folderId);
-      if (!folder) return;
-      if (!folder.items) folder.items = [];
-
-      folder.items.push({
-        id: Date.now(),
-        title: title,
-        url: url
-      });
-
-      this.saveFolders();
-      this.renderFolderItems();
-      this.modalTitle.textContent = `📁 KLASÖR: ${folder.name} (${folder.items.length})`;
+    addWebLink(title, url) {
+      const links = this.loadWebLinks();
+      links.push({ id: Date.now(), title, url });
+      this.saveWebLinks(links);
       this.sound.play('add');
-      ToastManager.show('Öğe klasöre eklendi!');
+      ToastManager.show('Bağlantı klasöre eklendi!');
     }
 
-    deleteItemFromFolder(folderId, itemId) {
-      const folder = this.folders.find(f => f.id === folderId);
-      if (!folder || !folder.items) return;
-
-      folder.items = folder.items.filter(i => i.id !== itemId);
-      this.saveFolders();
-      this.renderFolderItems();
-      this.modalTitle.textContent = `📁 KLASÖR: ${folder.name} (${folder.items.length})`;
+    deleteWebLink(id) {
+      let links = this.loadWebLinks();
+      links = links.filter(l => l.id !== id);
+      this.saveWebLinks(links);
       this.sound.play('delete');
-    }
-
-    addFolder(name, color) {
-      const newFolder = {
-        id: Date.now(),
-        name: name,
-        color: color || 'col-red',
-        items: []
-      };
-      this.folders.push(newFolder);
-      this.saveFolders();
-      this.sound.play('done');
-      ToastManager.show(`"${name}" klasörü rafa kondu!`);
-    }
-
-    deleteFolder(folderId) {
-      const folder = this.folders.find(f => f.id === folderId);
-      const name = folder ? folder.name : '';
-      this.folders = this.folders.filter(f => f.id !== folderId);
-      this.saveFolders();
-      this.sound.play('trash');
-      ToastManager.show(`"${name}" klasörü raftan kaldırıldı.`);
     }
   }
 
@@ -1176,7 +1373,7 @@
       mediaManager.init().catch(err => console.warn('Media frame init deferred:', err));
 
       const todoManager = new TodoManager(soundEngine);
-      new ShelfManager(soundEngine);
+      new ShelfManager(soundEngine, mediaManager.storage);
       new NotebookManager(soundEngine);
       new TrashController(todoManager, soundEngine);
       new CalibratorManager(soundEngine);

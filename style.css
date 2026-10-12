@@ -906,7 +906,7 @@ html, body {
 }
 
 /* ==========================================================================
-   8. DUVAR RAFI VE PİKSEL KLASÖRLER (SHELF & BINDERS)
+   8. DUVAR RAFI VE PİKSEL KLASÖRLER (SHELF.PNG VE HOTSPOTLAR)
    ========================================================================== */
 .shelf-container {
   position: absolute;
@@ -915,203 +915,267 @@ html, body {
   width: var(--shelf-width);
   height: var(--shelf-height);
   z-index: 25;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
   pointer-events: auto;
-}
-
-/* Klasörlerin Dizildiği Alan */
-.shelf-binders-wrapper {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 0 10px;
-  height: calc(100% - 14px);
-  z-index: 4;
-}
-
-/* Piksel Klasör (Binder) */
-.pixel-binder {
-  position: relative;
-  flex: 1;
-  max-width: 50px;
-  min-width: 36px;
-  height: 94%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 3px 6px 3px;
-  cursor: pointer;
-  border-radius: 3px 3px 0 0;
-  transition: transform 0.18s cubic-bezier(0.18, 0.89, 0.32, 1.28), filter 0.15s ease;
   user-select: none;
-  border: 3px solid #1a0f08;
-  box-shadow: 3px 0 0 rgba(0, 0, 0, 0.45);
 }
 
-/* Klasör Çekilme Animasyonu */
-.pixel-binder:hover {
-  transform: translateY(-14px);
-  filter: brightness(1.2);
-  z-index: 20;
+.shelf-art-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-/* Klasör Renk Temaları (Canlı & Belirgin 16-Bit Tonlar) */
-.pixel-binder.col-red {
-  background: #d63031;
-  border-left: 3px solid #ff7675;
-  border-right: 3px solid #8f1213;
+.shelf-pixel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.65));
 }
 
-.pixel-binder.col-blue {
-  background: #0984e3;
-  border-left: 3px solid #74b9ff;
-  border-right: 3px solid #064c84;
-}
-
-.pixel-binder.col-green {
-  background: #00b894;
-  border-left: 3px solid #55efc4;
-  border-right: 3px solid #006853;
-}
-
-.pixel-binder.col-yellow {
-  background: #e17055;
-  border-left: 3px solid #fab1a0;
-  border-right: 3px solid #8a3722;
-}
-
-.pixel-binder.col-purple {
-  background: #6c5ce7;
-  border-left: 3px solid #a29bfe;
-  border-right: 3px solid #3c2eb5;
-}
-
-/* Klasör Sırtı Etiketi (Parchment Paper Label) */
-.binder-label-tag {
-  background: #fffbe6;
-  border: 2px solid #2a1810;
-  box-shadow: inset 1px 1px 0 #ffffff;
-  width: 90%;
-  padding: 3px 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border-radius: 1px;
-}
-
-.binder-label-text {
-  font-family: var(--font-pixel);
-  font-size: 0.5rem;
-  color: #1a0f08;
-  line-height: 1;
-  text-transform: uppercase;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: bold;
-}
-
-/* Klasör Metal Çekme Halkası */
-.binder-ring {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid #e0e4e8;
-  background: #2b2e36;
-  box-shadow: inset 1px 1px 0 #fff;
-  margin-top: auto;
-  margin-bottom: 2px;
-}
-
-/* Klasör Hover Bilgi İpucu */
-.binder-tooltip {
+/* İnteraktif Sıcak Noktalar (Hotspots) */
+.shelf-hotspot {
   position: absolute;
-  top: -34px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+  z-index: 5;
+}
+
+.shelf-hotspot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px dashed rgba(248, 197, 58, 0);
+  border-radius: 2px;
+  transition: all 0.15s ease;
+  pointer-events: none;
+}
+
+.shelf-hotspot:hover::after {
+  border-color: rgba(248, 197, 58, 0.95);
+  background: rgba(248, 197, 58, 0.18);
+  box-shadow: 0 0 8px rgba(248, 197, 58, 0.4);
+}
+
+.shelf-hotspot:hover {
+  transform: translateY(-4px);
+}
+
+/* Hotspot Konumları */
+.shelf-hotspot.binder-red {
+  left: 5.8%;
+  top: 5.5%;
+  width: 6.8%;
+  height: 62%;
+}
+
+.shelf-hotspot.binder-green {
+  left: 12.6%;
+  top: 5.5%;
+  width: 5.5%;
+  height: 62%;
+}
+
+.shelf-hotspot.binder-blue {
+  left: 18.1%;
+  top: 5.5%;
+  width: 5.4%;
+  height: 62%;
+}
+
+.shelf-hotspot.books-stack {
+  left: 23.5%;
+  top: 5.5%;
+  width: 27.2%;
+  height: 62%;
+}
+
+.shelf-hotspot.shelf-plant {
+  left: 50.7%;
+  top: 10%;
+  width: 17.0%;
+  height: 75%;
+}
+
+.shelf-hotspot.shelf-clock {
+  left: 67.7%;
+  top: 22%;
+  width: 8.4%;
+  height: 44%;
+}
+
+.shelf-hotspot.shelf-camera {
+  left: 76.1%;
+  top: 28%;
+  width: 10.0%;
+  height: 38%;
+}
+
+/* Tooltipler */
+.shelf-tooltip {
+  position: absolute;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%) translateY(4px);
   background: var(--col-bg-dark);
   color: var(--col-accent-yellow);
   font-family: var(--font-pixel);
-  font-size: 0.55rem;
-  padding: 4px 8px;
+  font-size: 0.5rem;
+  padding: 3px 6px;
   border: var(--pixel-border);
   box-shadow: var(--pixel-shadow);
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transition: all 0.15s ease;
   z-index: 30;
 }
 
-.pixel-binder:hover .binder-tooltip {
+.shelf-hotspot:hover .shelf-tooltip {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
-/* Yeni Klasör Ekle Butonu / Raf Desteği */
-.shelf-add-binder-btn {
-  width: 28px;
-  height: 65%;
-  border: 2px dashed #f8c53a;
-  background: rgba(30, 18, 12, 0.7);
-  color: var(--col-accent-yellow);
+/* Kamera Flaş Efekti */
+.camera-flash {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  transition: opacity 0.12s ease-out;
+}
+
+.camera-flash.active {
+  opacity: 0.9;
+  transition: none;
+}
+
+/* ==========================================================================
+   KLASÖR MODAL: PC DOSYALARI & WEB LİNKLERİ SEKMELERİ
+   ========================================================================== */
+.modal-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--col-border-dark);
+  padding-bottom: 4px;
+}
+
+.tab-btn {
+  background: #bbb7a9;
+  border: 2px solid var(--col-border-dark);
   font-family: var(--font-pixel);
-  font-size: 0.8rem;
+  font-size: 0.55rem;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #222;
+  transition: all 0.12s ease;
+}
+
+.tab-btn:hover {
+  background: #d6d2c4;
+}
+
+.tab-btn.active {
+  background: var(--col-accent-yellow);
+  border-bottom-color: #222;
+  font-weight: bold;
+}
+
+/* Sürükle Bırak / Dosya Yükleme Alanı */
+.pc-dropzone {
+  border: 2px dashed #666;
+  background: rgba(255, 255, 255, 0.45);
+  padding: 12px;
+  text-align: center;
+  border-radius: 2px;
+  margin-bottom: 12px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.pc-dropzone.dragover {
+  border-color: var(--col-accent-cyan);
+  background: rgba(63, 199, 235, 0.25);
+  outline: 2px solid var(--col-accent-cyan);
+}
+
+.pc-dropzone-text {
+  font-family: var(--font-retro);
+  font-size: 1.15rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* Dosya Listesi */
+.pc-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.pc-file-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 2px solid var(--col-border-dark);
+  padding: 5px 8px;
+  font-family: var(--font-retro);
+  font-size: 1.1rem;
+}
+
+.pc-file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.pc-file-name {
+  color: #222;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+.pc-file-size {
+  color: #777;
+  font-size: 0.95rem;
+}
+
+.pc-file-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.file-action-btn {
+  background: #ddd;
+  border: 1px solid #444;
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  padding: 3px 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
-  border-radius: 3px 3px 0 0;
+  color: #222;
 }
 
-.shelf-add-binder-btn:hover {
-  background: rgba(248, 197, 58, 0.35);
-  border-color: #ffffff;
-  transform: scale(1.1);
+.file-action-btn:hover {
+  background: var(--col-accent-yellow);
 }
 
-/* Ahşap Raf Tahtası (Masif Meşe Ağacı / Vurgulu Raf) */
-.shelf-board {
-  position: relative;
-  width: 100%;
-  height: 14px;
-  background: linear-gradient(to bottom, #d07a38 0%, #a25220 35%, #682e0e 100%);
-  border-top: 3px solid #fca35d;
-  border-bottom: 3px solid #240f05;
-  border-left: 3px solid #fca35d;
-  border-right: 3px solid #240f05;
-  box-shadow: 
-    0 8px 16px rgba(0, 0, 0, 0.75),
-    inset 0 2px 0 rgba(255, 255, 255, 0.25);
-  z-index: 5;
-}
-
-/* Ahşap/Demir Raf Destek Ayakları (Brackets) */
-.shelf-bracket {
-  position: absolute;
-  bottom: -16px;
-  width: 16px;
-  height: 16px;
-  background: #1b1c20;
-  border-left: 2px solid #4a4e5a;
-  border-bottom: 2px solid #0f1014;
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.6));
-}
-
-.shelf-bracket.left {
-  left: 10%;
-}
-
-.shelf-bracket.right {
-  right: 10%;
-  transform: scaleX(-1);
+.file-action-btn.del:hover {
+  background: var(--col-accent-red);
+  color: #fff;
 }
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixel Room Desktop - Lively Wallpaper</title>
-  <link rel="stylesheet" href="style.css?v=2.1">
+  <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body>
 
@@ -74,36 +74,34 @@
       </div>
 
       <!-- ====================================================================
-           3. DUVAR RAFI VE KLASÖRLER (MANTAR PANO ALTI)
+           3. DUVAR RAFI VE PİKSEL KLASÖRLER (MANTAR PANO ALTI)
            ==================================================================== -->
       <div class="shelf-container" id="shelf-container">
-        <div class="shelf-binders-wrapper" id="shelf-binders-wrapper">
-          <div class="pixel-binder col-red" data-folder-id="1" title="PROJELER (3 öğe)">
-            <div class="binder-label-tag"><span class="binder-label-text">PROJELER</span></div>
-            <div class="binder-ring"></div>
-            <div class="binder-tooltip">📁 PROJELER (3)</div>
+        <div class="shelf-art-wrapper">
+          <img src="shelf.png" class="shelf-pixel-image" alt="Piksel Raf">
+          
+          <!-- İnteraktif Sıcak Noktalar (Hotspots) -->
+          <div class="shelf-hotspot binder-red" data-folder="projeler" title="Kırmızı Klasör (Projeler)">
+            <div class="shelf-tooltip">📁 PROJELER</div>
           </div>
-          <div class="pixel-binder col-blue" data-folder-id="2" title="DERSLER (2 öğe)">
-            <div class="binder-label-tag"><span class="binder-label-text">DERSLER</span></div>
-            <div class="binder-ring"></div>
-            <div class="binder-tooltip">📁 DERSLER (2)</div>
+          <div class="shelf-hotspot binder-green" data-folder="dersler" title="Yeşil Klasör (Dersler & Kaynaklar)">
+            <div class="shelf-tooltip">📁 DERSLER</div>
           </div>
-          <div class="pixel-binder col-green" data-folder-id="3" title="NOTLAR (2 öğe)">
-            <div class="binder-label-tag"><span class="binder-label-text">NOTLAR</span></div>
-            <div class="binder-ring"></div>
-            <div class="binder-tooltip">📁 NOTLAR (2)</div>
+          <div class="shelf-hotspot binder-blue" data-folder="notlar" title="Mavi Klasör (Notlar & Belgeler)">
+            <div class="shelf-tooltip">📁 NOTLAR</div>
           </div>
-          <div class="pixel-binder col-yellow" data-folder-id="4" title="MEDYA (2 öğe)">
-            <div class="binder-label-tag"><span class="binder-label-text">MEDYA</span></div>
-            <div class="binder-ring"></div>
-            <div class="binder-tooltip">📁 MEDYA (2)</div>
+          <div class="shelf-hotspot books-stack" data-folder="arsiv" title="Defterler & Kitaplar (Kişisel Arşiv)">
+            <div class="shelf-tooltip">📚 ARŞİV & KİTAPLAR</div>
           </div>
-          <div class="shelf-add-binder-btn" id="btn-quick-add-binder" title="Rafa Yeni Klasör Ekle">+</div>
-        </div>
-        <!-- Ahşap Raf Tahtası ve Destek Ayakları -->
-        <div class="shelf-board">
-          <div class="shelf-bracket left"></div>
-          <div class="shelf-bracket right"></div>
+          <div class="shelf-hotspot shelf-plant" id="hotspot-plant" title="Sarmaşık Bitki">
+            <div class="shelf-tooltip">🌿 BİTKİ</div>
+          </div>
+          <div class="shelf-hotspot shelf-clock" id="hotspot-clock" title="Masa Saati">
+            <div class="shelf-tooltip" id="clock-tooltip">⏰ SAAT</div>
+          </div>
+          <div class="shelf-hotspot shelf-camera" id="hotspot-camera" title="Retro Fotoğraf Makinesi">
+            <div class="shelf-tooltip">📸 FOTOĞRAF MAKİNESİ</div>
+          </div>
         </div>
       </div>
 
@@ -155,66 +153,61 @@
   </div>
 
   <!-- ====================================================================
-       RETRO MODAL PENCERE: KLASÖR İÇERİĞİ VE YÖNETİMİ
+       RETRO MODAL PENCERE: KLASÖR İÇERİĞİ (PC DOSYALARI & WEB BAĞLANTILARI)
        ==================================================================== -->
   <div class="modal-overlay" id="folder-modal">
-    <div class="pixel-window">
+    <div class="pixel-window" style="max-width: 580px;">
       <div class="window-titlebar">
         <span class="window-title" id="folder-modal-title">📁 KLASÖR İÇERİĞİ</span>
         <button class="window-close-btn" id="folder-modal-close-btn" title="Kapat">X</button>
       </div>
       
       <div class="window-body">
-        <div class="shortcuts-grid" id="folder-items-grid">
-          <!-- JS ile klasörün içindeki öğeler doldurulur -->
+        <!-- Sekmeler -->
+        <div class="modal-tabs">
+          <button class="tab-btn active" id="tab-btn-pc">💾 PC DOSYALARI (<span id="pc-files-count">0</span>)</button>
+          <button class="tab-btn" id="tab-btn-web">🔗 WEB BAĞLANTILARI (<span id="web-links-count">0</span>)</button>
         </div>
 
-        <div class="add-shortcut-section">
-          <div class="add-shortcut-title">+ BU KLASÖRE YENİ BAĞLANTI EKLE</div>
-          <form class="shortcut-form" id="folder-item-form">
-            <input type="text" class="shortcut-input" id="folder-item-title" placeholder="Başlık (Örn: Proje Deposu)" required maxlength="25">
-            <input type="url" class="shortcut-input" id="folder-item-url" placeholder="URL (https://...)" required>
-            <button type="submit" class="shortcut-submit-btn">EKLE</button>
-          </form>
+        <!-- 1. PC Dosyaları Paneli -->
+        <div id="panel-pc-files">
+          <div class="pc-dropzone" id="folder-drop-zone">
+            <div class="pc-dropzone-text">📂 Bilgisayarınızdan dosya sürükleyip bırakın</div>
+            <input type="file" id="folder-file-input" multiple style="display: none;">
+            <button type="button" class="dock-btn" id="btn-browse-pc-files" style="padding: 5px 12px; margin-top: 4px;">💻 PC'den Dosya Seç</button>
+          </div>
+
+          <div class="pc-file-list" id="folder-pc-files-list">
+            <!-- JS ile dinamik PC dosyaları basılır -->
+          </div>
         </div>
 
-        <div style="display: flex; justify-content: flex-end; margin-top: 12px; border-top: 1px dashed #aaa; padding-top: 8px;">
-          <button class="dock-btn" id="btn-delete-folder" style="background: #9e2a2b; color: #fff;">🗑️ BU KLASÖRÜ SİL</button>
+        <!-- 2. Web Bağlantıları Paneli -->
+        <div id="panel-web-links" style="display: none;">
+          <div class="shortcuts-grid" id="folder-items-grid">
+            <!-- JS ile doldurulur -->
+          </div>
+
+          <div class="add-shortcut-section">
+            <div class="add-shortcut-title">+ BU KLASÖRE YENİ WEB BAĞLANTISI EKLE</div>
+            <form class="shortcut-form" id="folder-item-form">
+              <input type="text" class="shortcut-input" id="folder-item-title" placeholder="Başlık (Örn: Proje Dokümanı)" required maxlength="25">
+              <input type="url" class="shortcut-input" id="folder-item-url" placeholder="URL (https://...)" required>
+              <button type="submit" class="shortcut-submit-btn">EKLE</button>
+            </form>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; border-top: 1px dashed #aaa; padding-top: 8px;">
+          <span style="font-size: 0.85rem; color: #666; font-style: italic;">IndexedDB ile PC dosyalarınız kalıcıdır</span>
+          <button class="dock-btn" id="btn-clear-folder-content" style="background: #9e2a2b; color: #fff; font-size: 0.45rem;">🗑️ TÜMÜNÜ TEMİZLE</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ====================================================================
-       RETRO MODAL: RAFA YENİ KLASÖR EKLEME
-       ==================================================================== -->
-  <div class="modal-overlay" id="add-binder-modal">
-    <div class="pixel-window" style="max-width: 420px;">
-      <div class="window-titlebar">
-        <span class="window-title">📚 RAFA YENİ KLASÖR KOY</span>
-        <button class="window-close-btn" id="add-binder-close-btn" title="Kapat">X</button>
-      </div>
-      <div class="window-body">
-        <form class="shortcut-form" id="new-binder-form" style="flex-direction: column; gap: 8px;">
-          <div>
-            <label style="font-family: var(--font-pixel); font-size: 0.55rem; display: block; margin-bottom: 4px;">KLASÖR ADI:</label>
-            <input type="text" class="shortcut-input" id="new-binder-name" placeholder="Örn: ARŞİV" required maxlength="12" style="width: 100%;">
-          </div>
-          <div>
-            <label style="font-family: var(--font-pixel); font-size: 0.55rem; display: block; margin-bottom: 4px;">KLASÖR RENGİ:</label>
-            <select id="new-binder-color" class="shortcut-input" style="width: 100%; height: 32px; font-family: var(--font-retro);">
-              <option value="col-red">🔴 Bordo / Kırmızı</option>
-              <option value="col-blue">🔵 Klasik Mavi</option>
-              <option value="col-green">🟢 Zeytin Yeşili</option>
-              <option value="col-yellow">🟡 Hardal Sarısı</option>
-              <option value="col-purple">🟣 Mor / Mürdüm</option>
-            </select>
-          </div>
-          <button type="submit" class="shortcut-submit-btn" style="width: 100%; padding: 8px; margin-top: 4px;">RAFA KOY</button>
-        </form>
-      </div>
-    </div>
-  </div>
+  <!-- Fotoğraf Makinesi Flaş Efekti -->
+  <div id="camera-flash" class="camera-flash"></div>
 
   <!-- ====================================================================
        HIZLI AYARLAR & ARAÇ ÇUBUĞU (SAĞ ALT KÖŞE)
@@ -276,6 +269,6 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Uygulama Betiği -->
-  <script src="app.js?v=2.1"></script>
+  <script src="app.js?v=3.0"></script>
 </body>
 </html>
