@@ -892,6 +892,8 @@
       if (plant) {
         plant.addEventListener('click', (e) => {
           e.stopPropagation();
+          plant.classList.add('rustle');
+          setTimeout(() => plant.classList.remove('rustle'), 450);
           this.sound.play('rustle');
           ToastManager.show('🌿 Sarmaşık yaprakları kıpırdadı!');
         });
@@ -902,6 +904,8 @@
       if (clock) {
         clock.addEventListener('click', (e) => {
           e.stopPropagation();
+          clock.classList.add('pulse');
+          setTimeout(() => clock.classList.remove('pulse'), 350);
           this.sound.play('clock');
           const timeStr = new Date().toLocaleTimeString('tr-TR');
           ToastManager.show(`⏰ Anlık Saat: ${timeStr}`);
@@ -913,6 +917,8 @@
       if (camera) {
         camera.addEventListener('click', (e) => {
           e.stopPropagation();
+          camera.classList.add('snap');
+          setTimeout(() => camera.classList.remove('snap'), 300);
           this.sound.play('camera');
           if (this.cameraFlash) {
             this.cameraFlash.classList.add('active');

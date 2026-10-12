@@ -906,7 +906,7 @@ html, body {
 }
 
 /* ==========================================================================
-   8. DUVAR RAFI VE PİKSEL KLASÖRLER (SHELF.PNG VE HOTSPOTLAR)
+   8. DUVAR RAFI VE PİKSEL KLASÖRLER (HARMONİZE EDİLMİŞ MASİF AHŞAP RAF)
    ========================================================================== */
 .shelf-container {
   position: absolute;
@@ -917,15 +917,129 @@ html, body {
   z-index: 25;
   pointer-events: auto;
   user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: visible;
 }
 
-.shelf-art-wrapper {
+/* Rafta Duran Eşyaların Dizilimi */
+.shelf-items-row {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 64%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 4.5%;
+  box-sizing: border-box;
+  margin-bottom: -5px; /* Ahşap raf tahtasının tam üzerine oturması için */
+  z-index: 2;
+  overflow: visible;
 }
 
-.shelf-pixel-image {
+/* Tekil Raf Ögesi (Klasörler ve Dekorlar) */
+.shelf-item {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(0.18, 0.89, 0.32, 1.28), filter 0.18s ease;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.45));
+}
+
+.shelf-asset {
+  display: block;
+  height: 100%;
+  width: auto;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+}
+
+/* Ögelerin Özel Oranları */
+.shelf-item.binder-red { height: 96%; }
+.shelf-item.binder-green { height: 94%; }
+.shelf-item.binder-blue { height: 92%; }
+.shelf-item.books-stack { height: 88%; }
+.shelf-item.shelf-plant { 
+  height: 114%; 
+  margin-bottom: -16px; /* Sarmaşık dalları ahşap rafın önüne sarkarak odaya derinlik katar */
+  z-index: 6; 
+}
+.shelf-item.shelf-clock { height: 56%; margin-bottom: 2px; }
+.shelf-item.shelf-camera { height: 44%; margin-bottom: 2px; }
+
+/* Klasörler ve Kitaplar Hover Efekti - Öne Çekilme Hissi */
+.shelf-item[data-folder]:hover {
+  transform: translateY(-9px) scale(1.05);
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 5px rgba(248, 197, 58, 0.5));
+  z-index: 10;
+}
+
+/* Bitki Hover & Tıklama Efekti */
+.shelf-item.shelf-plant:hover {
+  transform: translateY(-3px) rotate(1deg);
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 4px rgba(90, 197, 79, 0.45));
+}
+
+@keyframes plant-rustle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg) scale(1.02); }
+  50% { transform: rotate(3deg) scale(1.02); }
+  75% { transform: rotate(-1.5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.shelf-item.shelf-plant.rustle {
+  animation: plant-rustle 0.45s ease;
+}
+
+/* Saat Hover & Tıklama Efekti */
+.shelf-item.shelf-clock:hover {
+  transform: translateY(-4px) scale(1.06);
+  filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 4px rgba(248, 197, 58, 0.4));
+}
+
+@keyframes clock-bounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15) translateY(-3px); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.shelf-item.shelf-clock.pulse {
+  animation: clock-bounce 0.35s ease;
+}
+
+/* Kamera Hover & Dekanşör Efekti */
+.shelf-item.shelf-camera:hover {
+  transform: translateY(-4px) scale(1.06);
+  filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 4px rgba(63, 199, 235, 0.4));
+}
+
+@keyframes camera-click {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.92) translateY(2px); }
+  70% { transform: scale(1.08) translateY(-2px); }
+  100% { transform: scale(1); }
+}
+
+.shelf-item.shelf-camera.snap {
+  animation: camera-click 0.3s ease;
+}
+
+/* Masif Ahşap Raf Kaidesi ve Duvar Braketleri */
+.shelf-wood-base {
+  position: relative;
+  width: 100%;
+  height: 40%;
+  z-index: 1;
+}
+
+.shelf-wood-img {
   width: 100%;
   height: 100%;
   object-fit: fill;
@@ -933,86 +1047,6 @@ html, body {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.65));
-}
-
-/* İnteraktif Sıcak Noktalar (Hotspots) */
-.shelf-hotspot {
-  position: absolute;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.15s ease;
-  z-index: 5;
-}
-
-.shelf-hotspot::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border: 2px dashed rgba(248, 197, 58, 0);
-  border-radius: 2px;
-  transition: all 0.15s ease;
-  pointer-events: none;
-}
-
-.shelf-hotspot:hover::after {
-  border-color: rgba(248, 197, 58, 0.95);
-  background: rgba(248, 197, 58, 0.18);
-  box-shadow: 0 0 8px rgba(248, 197, 58, 0.4);
-}
-
-.shelf-hotspot:hover {
-  transform: translateY(-4px);
-}
-
-/* Hotspot Konumları */
-.shelf-hotspot.binder-red {
-  left: 5.8%;
-  top: 5.5%;
-  width: 6.8%;
-  height: 62%;
-}
-
-.shelf-hotspot.binder-green {
-  left: 12.6%;
-  top: 5.5%;
-  width: 5.5%;
-  height: 62%;
-}
-
-.shelf-hotspot.binder-blue {
-  left: 18.1%;
-  top: 5.5%;
-  width: 5.4%;
-  height: 62%;
-}
-
-.shelf-hotspot.books-stack {
-  left: 23.5%;
-  top: 5.5%;
-  width: 27.2%;
-  height: 62%;
-}
-
-.shelf-hotspot.shelf-plant {
-  left: 50.7%;
-  top: 10%;
-  width: 17.0%;
-  height: 75%;
-}
-
-.shelf-hotspot.shelf-clock {
-  left: 67.7%;
-  top: 22%;
-  width: 8.4%;
-  height: 44%;
-}
-
-.shelf-hotspot.shelf-camera {
-  left: 76.1%;
-  top: 28%;
-  width: 10.0%;
-  height: 38%;
 }
 
 /* Tooltipler */
@@ -1025,17 +1059,17 @@ html, body {
   color: var(--col-accent-yellow);
   font-family: var(--font-pixel);
   font-size: 0.5rem;
-  padding: 3px 6px;
+  padding: 4px 7px;
   border: var(--pixel-border);
   box-shadow: var(--pixel-shadow);
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transition: all 0.15s ease;
+  transition: all 0.16s ease;
   z-index: 30;
 }
 
-.shelf-hotspot:hover .shelf-tooltip {
+.shelf-item:hover .shelf-tooltip {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }

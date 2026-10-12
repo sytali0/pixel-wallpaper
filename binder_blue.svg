@@ -1,0 +1,38 @@
+<svg viewBox="0 0 34 92" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Dış gölge kenar -->
+  <rect x="1" y="1" width="32" height="90" fill="#0b1729" rx="1"/>
+  <!-- Ana Mavi Gövde -->
+  <rect x="2" y="2" width="30" height="88" fill="#24497e"/>
+  <!-- Sol Işık Bandı -->
+  <rect x="3" y="2" width="4" height="88" fill="#3866a8"/>
+  <rect x="4" y="3" width="2" height="86" fill="#5282c9"/>
+  <!-- Sağ Gölge Bandı -->
+  <rect x="28" y="2" width="4" height="88" fill="#132646"/>
+  <!-- Kabartma Bantlar -->
+  <rect x="2" y="10" width="30" height="2" fill="#132646"/>
+  <rect x="2" y="11" width="30" height="1" fill="#5282c9"/>
+  <rect x="2" y="52" width="30" height="2" fill="#132646"/>
+  <rect x="2" y="53" width="30" height="1" fill="#5282c9"/>
+  <rect x="2" y="78" width="30" height="2" fill="#132646"/>
+  <rect x="2" y="79" width="30" height="1" fill="#5282c9"/>
+  <!-- Pirinç Köşe Koruyucuları -->
+  <polygon points="2,2 12,2 12,4 4,4 4,12 2,12" fill="#dfa634"/>
+  <polygon points="2,2 10,2 10,3 3,3 3,10 2,10" fill="#fce278"/>
+  <polygon points="2,90 12,90 12,88 4,88 4,80 2,80" fill="#dfa634"/>
+  <polygon points="2,90 10,90 10,89 3,89 3,82 2,82" fill="#fce278"/>
+  <!-- Etiket Kartı -->
+  <rect x="5" y="15" width="24" height="30" fill="#0c182b"/>
+  <rect x="6" y="16" width="22" height="28" fill="#fffef7"/>
+  <rect x="6" y="16" width="22" height="5" fill="#24497e"/>
+  <rect x="8" y="18" width="18" height="1" fill="#9bc3fc"/>
+  <!-- Not Çizgileri -->
+  <rect x="8" y="24" width="18" height="2" fill="#2b222a"/>
+  <rect x="8" y="28" width="13" height="2" fill="#555555"/>
+  <rect x="8" y="33" width="15" height="2" fill="#555555"/>
+  <rect x="8" y="38" width="9" height="2" fill="#777777"/>
+  <!-- Pirinç Çekme Halkası -->
+  <rect x="12" y="62" width="10" height="10" fill="#0c182b" rx="2"/>
+  <rect x="13" y="63" width="8" height="8" fill="#dfa634" rx="1"/>
+  <rect x="14" y="64" width="6" height="6" fill="#08101d" rx="1"/>
+  <rect x="14" y="64" width="2" height="2" fill="#fce278"/>
+</svg>

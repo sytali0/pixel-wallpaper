@@ -19,21 +19,21 @@ Windows Lively Wallpaper veya tam ekran web tarayıcıları için tasarlanmış,
    - Özel piksel kaydırma çubuğu (custom pixel scrollbar).
 
 3. **Duvar Rafı ve Piksel Klasörler (Mantar Pano Altı)**
-   - Odanın ahşap duvarına ve retro atmosferine tam oturan özel piksel duvar rafı (`shelf.png`).
-   - **4 İnteraktif Klasör Bölümü**:
-     - 🔴 **Kırmızı Klasör (Projeler)**
-     - 🟢 **Yeşil Klasör (Dersler & Kaynaklar)**
-     - 🔵 **Mavi Klasör (Notlar & Belgeler)**
-     - 📚 **Kitap & Defter Seti (Kişisel Arşiv)**
+   - Odanın ahşap dokusuna, ışık açısına ve lo-fi estetiğine %100 uyumlu, özel tasarlanmış masif ahşap duvar rafı ve konsolları.
+   - **4 İnteraktif Klasör & Arşiv Bölümü**:
+     - 🔴 **Kırmızı Deri Klasör (Projeler)**: Altın köşe koruyuculu, metal çekme halkalı, projelere özel klasör.
+     - 🟢 **Yeşil Çalışma Klasörü (Dersler & Kaynaklar)**: Çelik detaylı akademik/eğitim doküman klasörü.
+     - 🔵 **Mavi Klasör (Notlar & Belgeler)**: Klasik çalışma notları ve günlük belgeler.
+     - 📚 **Eski Ciltli Kitap Seti (Kişisel Arşiv)**: Yaldızlı sırt kabartmalarına sahip nostaljik kitap seti.
    - **PC'den Dosya Ekleme & IndexedDB Kalıcılığı**:
-     - Bilgisayarınızdan istediğiniz dosyayı (PDF, PNG, JPG, TXT, Kod, ZIP vb.) sürükleyip bırakabilir veya "Dosya Seç" ile klasörünüze ekleyebilirsiniz.
+     - Bilgisayarınızdan istediğiniz dosyayı (PDF, PNG, JPG, TXT, Kod, ZIP vb.) sürükleyip bırakabilir veya "PC'den Dosya Seç" ile klasörünüze kaydedebilirsiniz.
      - Dosyalar IndexedDB üzerinde güvenle saklanır; tarayıcı yenilense dahi silinmez.
      - Eklenen dosyaları tek tıkla tarayıcıda açabilir, önizleyebilir veya bilgisayarınıza indirebilirsiniz.
    - **Web Bağlantıları**: Klasörlerinize URL linkleri de ekleyebilirsiniz.
    - **İnteraktif Sürprizler (Easter Eggs)**:
-     - 🌿 **Sarmaşık**: Tıklandığında yaprak hışırtı sesi çıkarır.
-     - ⏰ **Masa Saati**: Tıklandığında anlık dijital saati gösterir ve tik-tok sesi çalar.
-     - 📸 **Retro Fotoğraf Makinesi**: Tıklandığında ekran bembeyaz flaşla parlar ve fotoğraf çekme sesi oynatır.
+     - 🌿 **Sarmaşık Bitki**: Rafın önüne sarkan terakota saksılı sarmaşık; tıklandığında hışırdar ve yaprakları salınır.
+     - ⏰ **Retro Ahşap Masa Saati**: Tıklandığında canlı sistem saatini gösterir ve tik-tok sesi çalar.
+     - 📸 **Retro Analog Kamera**: Tıklandığında flaş patlar ve 35mm analog deklanşör sesi oynatır.
 
 4. **Masadaki Defterler / Kısayollar (Masa Sol Bölümü)**
    - Tıklandığında retro işletim sistemi penceresi (modal) açılır.

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixel Room Desktop - Lively Wallpaper</title>
-  <link rel="stylesheet" href="style.css?v=3.0">
+  <link rel="stylesheet" href="style.css?v=4.0">
 </head>
 <body>
 
@@ -77,31 +77,54 @@
            3. DUVAR RAFI VE PİKSEL KLASÖRLER (MANTAR PANO ALTI)
            ==================================================================== -->
       <div class="shelf-container" id="shelf-container">
-        <div class="shelf-art-wrapper">
-          <img src="shelf.png" class="shelf-pixel-image" alt="Piksel Raf">
-          
-          <!-- İnteraktif Sıcak Noktalar (Hotspots) -->
-          <div class="shelf-hotspot binder-red" data-folder="projeler" title="Kırmızı Klasör (Projeler)">
+        <!-- Rafta Duran İnteraktif Eşyalar & Klasörler -->
+        <div class="shelf-items-row" id="shelf-items-row">
+          <!-- 1. Kırmızı Klasör (Projeler) -->
+          <div class="shelf-item shelf-hotspot binder-red" data-folder="projeler" title="Kırmızı Klasör (Projeler)">
+            <img src="binder_red.svg" class="shelf-asset" alt="Projeler">
             <div class="shelf-tooltip">📁 PROJELER</div>
           </div>
-          <div class="shelf-hotspot binder-green" data-folder="dersler" title="Yeşil Klasör (Dersler & Kaynaklar)">
+
+          <!-- 2. Yeşil Klasör (Dersler) -->
+          <div class="shelf-item shelf-hotspot binder-green" data-folder="dersler" title="Yeşil Klasör (Dersler & Kaynaklar)">
+            <img src="binder_green.svg" class="shelf-asset" alt="Dersler">
             <div class="shelf-tooltip">📁 DERSLER</div>
           </div>
-          <div class="shelf-hotspot binder-blue" data-folder="notlar" title="Mavi Klasör (Notlar & Belgeler)">
+
+          <!-- 3. Mavi Klasör (Notlar) -->
+          <div class="shelf-item shelf-hotspot binder-blue" data-folder="notlar" title="Mavi Klasör (Notlar & Belgeler)">
+            <img src="binder_blue.svg" class="shelf-asset" alt="Notlar">
             <div class="shelf-tooltip">📁 NOTLAR</div>
           </div>
-          <div class="shelf-hotspot books-stack" data-folder="arsiv" title="Defterler & Kitaplar (Kişisel Arşiv)">
+
+          <!-- 4. Vintage Kitap Seti (Arşiv) -->
+          <div class="shelf-item shelf-hotspot books-stack" data-folder="arsiv" title="Eski Kitap Seti (Kişisel Arşiv)">
+            <img src="books_stack.svg" class="shelf-asset" alt="Arşiv">
             <div class="shelf-tooltip">📚 ARŞİV & KİTAPLAR</div>
           </div>
-          <div class="shelf-hotspot shelf-plant" id="hotspot-plant" title="Sarmaşık Bitki">
+
+          <!-- 5. Sarmaşık Saksı Bitkisi -->
+          <div class="shelf-item shelf-hotspot shelf-plant" id="hotspot-plant" title="Sarmaşık Bitki">
+            <img src="shelf_plant.svg" class="shelf-asset" alt="Bitki">
             <div class="shelf-tooltip">🌿 BİTKİ</div>
           </div>
-          <div class="shelf-hotspot shelf-clock" id="hotspot-clock" title="Masa Saati">
+
+          <!-- 6. Retro Ahşap Masa Saati -->
+          <div class="shelf-item shelf-hotspot shelf-clock" id="hotspot-clock" title="Masa Saati">
+            <img src="shelf_clock.svg" class="shelf-asset" alt="Saat">
             <div class="shelf-tooltip" id="clock-tooltip">⏰ SAAT</div>
           </div>
-          <div class="shelf-hotspot shelf-camera" id="hotspot-camera" title="Retro Fotoğraf Makinesi">
+
+          <!-- 7. Retro Fotoğraf Makinesi -->
+          <div class="shelf-item shelf-hotspot shelf-camera" id="hotspot-camera" title="Retro Fotoğraf Makinesi">
+            <img src="shelf_camera.svg" class="shelf-asset" alt="Fotoğraf Makinesi">
             <div class="shelf-tooltip">📸 FOTOĞRAF MAKİNESİ</div>
           </div>
+        </div>
+
+        <!-- Masif Ahşap Raf ve Duvar Konsolları -->
+        <div class="shelf-wood-base">
+          <img src="shelf_wood.svg" class="shelf-wood-img" alt="Ahşap Raf">
         </div>
       </div>
 
@@ -269,6 +292,6 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Uygulama Betiği -->
-  <script src="app.js?v=3.0"></script>
+  <script src="app.js?v=4.0"></script>
 </body>
 </html>

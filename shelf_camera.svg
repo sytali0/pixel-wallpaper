@@ -1,0 +1,44 @@
+<svg viewBox="0 0 48 38" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Dış Hat / Gölge -->
+  <rect x="2" y="6" width="44" height="31" fill="#0f1114" rx="2"/>
+
+  <!-- Üst Alüminyum Plaka -->
+  <rect x="3" y="7" width="42" height="9" fill="#88909c"/>
+  <rect x="3" y="7" width="42" height="8" fill="#d4d8de"/>
+  <rect x="3" y="7" width="42" height="2" fill="#f2f5f8"/>
+
+  <!-- Dekanşör Butonu (Kırmızı) -->
+  <rect x="34" y="3" width="5" height="4" fill="#0f1114"/>
+  <rect x="35" y="4" width="3" height="3" fill="#d32f2f"/>
+  <rect x="35" y="4" width="3" height="1" fill="#ff7676"/>
+
+  <!-- Sol Çark (Film Sarma) -->
+  <rect x="6" y="3" width="7" height="4" fill="#0f1114"/>
+  <rect x="7" y="4" width="5" height="3" fill="#a4aab4"/>
+  <rect x="7" y="4" width="5" height="1" fill="#e4e8ef"/>
+
+  <!-- Vizör Penceresi -->
+  <rect x="10" y="9" width="7" height="5" fill="#0f1114"/>
+  <rect x="11" y="10" width="5" height="3" fill="#2d4263"/>
+  <rect x="11" y="10" width="2" height="2" fill="#88b5ea"/>
+
+  <!-- Ana Gövde (Deri Kaplama / Siyah) -->
+  <rect x="3" y="15" width="42" height="19" fill="#242528"/>
+  <rect x="3" y="16" width="42" height="1" fill="#38393d"/>
+  <rect x="3" y="33" width="42" height="1" fill="#141416"/>
+
+  <!-- Alt Metal Plaka -->
+  <rect x="3" y="34" width="42" height="2" fill="#9aa0aa"/>
+  <rect x="3" y="34" width="42" height="1" fill="#d4d8de"/>
+
+  <!-- Objektif / Lens (Merkez) -->
+  <circle cx="27" cy="24" r="11" fill="#0f1114"/>
+  <circle cx="27" cy="24" r="10" fill="#656c78"/>
+  <circle cx="27" cy="24" r="9" fill="#8c94a0"/>
+  <circle cx="27" cy="24" r="8" fill="#22252a"/>
+  <circle cx="27" cy="24" r="6.5" fill="#162533"/>
+  <!-- Mercek Cam Yansıması -->
+  <path d="M 23,20 A 5,5 0 0,1 29,19" stroke="#4da8da" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="24" cy="21" r="1" fill="#ffffff"/>
+  <circle cx="30" cy="27" r="1.2" fill="#4da8da"/>
+</svg>

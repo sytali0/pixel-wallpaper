@@ -1,0 +1,43 @@
+<svg viewBox="0 0 38 52" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Dış Ahşap Kasa Gölgesi -->
+  <path d="M 5,16 Q 19,4 33,16 L 33,46 L 5,46 Z" fill="#1c0e06"/>
+  <!-- Ahşap Kasa Gövdesi -->
+  <path d="M 6,17 Q 19,6 32,17 L 32,45 L 6,45 Z" fill="#9c5f2b"/>
+  <!-- Sol Işık Eğrisi -->
+  <path d="M 6,17 Q 19,6 23,10 L 23,45 L 6,45 Z" fill="#b5753b"/>
+  <rect x="8" y="20" width="3" height="23" fill="#d4945a"/>
+  <!-- Sağ Gölge -->
+  <rect x="28" y="20" width="4" height="24" fill="#633612"/>
+
+  <!-- Pirinç Çerçeve Halkası -->
+  <circle cx="19" cy="29" r="12" fill="#1c0e06"/>
+  <circle cx="19" cy="29" r="11" fill="#dfa634"/>
+  <circle cx="19" cy="29" r="10" fill="#fce278"/>
+  <circle cx="19" cy="29" r="9.5" fill="#dfa634"/>
+
+  <!-- Krem Kadran -->
+  <circle cx="19" cy="29" r="9" fill="#fffdf2"/>
+
+  <!-- Saat Noktaları (12, 3, 6, 9) -->
+  <rect x="18" y="21" width="2" height="2" fill="#2b222a"/>
+  <rect x="25" y="28" width="2" height="2" fill="#2b222a"/>
+  <rect x="18" y="35" width="2" height="2" fill="#2b222a"/>
+  <rect x="11" y="28" width="2" height="2" fill="#2b222a"/>
+
+  <!-- Akrep ve Yelkovan (10:10 pozisyonu) -->
+  <!-- Merkez Mil -->
+  <circle cx="19" cy="29" r="1.5" fill="#dfa634"/>
+  <!-- Akrep (10 yönü) -->
+  <line x1="19" y1="29" x2="15" y2="25" stroke="#2b222a" stroke-width="1.8"/>
+  <!-- Yelkovan (2 yönü) -->
+  <line x1="19" y1="29" x2="24" y2="24" stroke="#2b222a" stroke-width="1.2"/>
+
+  <!-- Pirinç Küre Ayaklar -->
+  <circle cx="9" cy="47" r="3" fill="#1c0e06"/>
+  <circle cx="9" cy="46" r="2.5" fill="#dfa634"/>
+  <circle cx="9" cy="45.5" r="1" fill="#fce278"/>
+
+  <circle cx="29" cy="47" r="3" fill="#1c0e06"/>
+  <circle cx="29" cy="46" r="2.5" fill="#dfa634"/>
+  <circle cx="29" cy="45.5" r="1" fill="#fce278"/>
+</svg>

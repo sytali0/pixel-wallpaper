@@ -1,0 +1,54 @@
+<svg viewBox="0 0 480 84" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Duvara Düşen Yumuşak Gölge -->
+  <rect x="8" y="22" width="464" height="14" fill="#1e0a05" opacity="0.45"/>
+  <rect x="14" y="36" width="452" height="6" fill="#1e0a05" opacity="0.2"/>
+  <polygon points="52,22 86,22 52,76" fill="#1e0a05" opacity="0.35"/>
+  <polygon points="394,22 428,22 394,76" fill="#1e0a05" opacity="0.35"/>
+
+  <!-- SOL KONSOL / BRAKET -->
+  <polygon points="54,20 82,20 82,24 58,70 54,70" fill="#1c0a05"/>
+  <polygon points="56,20 80,20 80,23 60,68 56,68" fill="#7a3519"/>
+  <!-- Sol Braket Işık Kenarı -->
+  <polygon points="56,20 60,20 60,68 56,68" fill="#9c4925"/>
+  <rect x="57" y="20" width="2" height="46" fill="#b86238"/>
+  <!-- Sol Braket Gölge Kenarı -->
+  <polygon points="76,20 80,20 80,23 62,65 60,65" fill="#4a1c0b"/>
+  <!-- Braket Çivi/Dübel Ayrıntısı -->
+  <circle cx="63" cy="30" r="2" fill="#2a0e05"/>
+  <circle cx="63" cy="29" r="1" fill="#dfa634"/>
+
+  <!-- SAĞ KONSOL / BRAKET -->
+  <polygon points="398,20 426,20 426,24 402,70 398,70" fill="#1c0a05"/>
+  <polygon points="400,20 424,20 424,23 404,68 400,68" fill="#7a3519"/>
+  <!-- Sağ Braket Işık Kenarı -->
+  <polygon points="400,20 404,20 404,68 400,68" fill="#9c4925"/>
+  <rect x="401" y="20" width="2" height="46" fill="#b86238"/>
+  <!-- Sağ Braket Gölge Kenarı -->
+  <polygon points="420,20 424,20 424,23 406,65 404,65" fill="#4a1c0b"/>
+  <!-- Braket Çivi/Dübel Ayrıntısı -->
+  <circle cx="407" cy="30" r="2" fill="#2a0e05"/>
+  <circle cx="407" cy="29" r="1" fill="#dfa634"/>
+
+  <!-- AHŞAP RAF TAHTASI (ANA PLANK) -->
+  <!-- Dış koyu hat -->
+  <rect x="4" y="2" width="472" height="20" fill="#230c06" rx="2"/>
+  <!-- Üst Işıklı Eğim Yüzeyi (Top Bevel) -->
+  <rect x="6" y="3" width="468" height="6" fill="#b5663d"/>
+  <rect x="6" y="3" width="468" height="2" fill="#d9885e"/>
+  <rect x="10" y="3" width="460" height="1" fill="#f2ae88"/>
+
+  <!-- Ön Dikey Ahşap Yüz (Front Face) -->
+  <rect x="6" y="9" width="468" height="10" fill="#84391c"/>
+  <!-- Ahşap Doku ve Damar Çizgileri -->
+  <rect x="12" y="11" width="48" height="1" fill="#9e4d29"/>
+  <rect x="30" y="14" width="72" height="1" fill="#61240e"/>
+  <rect x="160" y="12" width="80" height="1" fill="#9e4d29"/>
+  <rect x="190" y="15" width="64" height="1" fill="#61240e"/>
+  <rect x="310" y="11" width="96" height="1" fill="#9e4d29"/>
+  <rect x="340" y="14" width="50" height="1" fill="#61240e"/>
+  <rect x="430" y="12" width="36" height="1" fill="#9e4d29"/>
+
+  <!-- Alt Eğim ve Gölge Hattı -->
+  <rect x="6" y="19" width="468" height="3" fill="#45190a"/>
+  <rect x="6" y="21" width="468" height="1" fill="#290d04"/>
+</svg>

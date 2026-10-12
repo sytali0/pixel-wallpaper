@@ -1,0 +1,42 @@
+<svg viewBox="0 0 36 96" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Arka plan gölge kenarı -->
+  <rect x="1" y="1" width="34" height="94" fill="#1e0808" rx="1"/>
+  <!-- Ana Cilt Gövdesi -->
+  <rect x="2" y="2" width="32" height="92" fill="#9e2626"/>
+  <!-- Sol Işık Bandı -->
+  <rect x="3" y="2" width="4" height="92" fill="#c13838"/>
+  <rect x="4" y="3" width="2" height="90" fill="#d94e4e"/>
+  <!-- Sağ Gölge Bandı -->
+  <rect x="30" y="2" width="4" height="92" fill="#6d1717"/>
+  <!-- Kabartma Dikiş/Bant Çizgileri -->
+  <rect x="2" y="10" width="32" height="2" fill="#6d1717"/>
+  <rect x="2" y="11" width="32" height="1" fill="#d94e4e"/>
+  <rect x="2" y="56" width="32" height="2" fill="#6d1717"/>
+  <rect x="2" y="57" width="32" height="1" fill="#d94e4e"/>
+  <rect x="2" y="82" width="32" height="2" fill="#6d1717"/>
+  <rect x="2" y="83" width="32" height="1" fill="#d94e4e"/>
+  <!-- Üst Pirinç Köşe Koruyucu -->
+  <polygon points="2,2 14,2 14,5 5,5 5,14 2,14" fill="#dfa634"/>
+  <polygon points="2,2 12,2 12,3 3,3 3,12 2,12" fill="#fce278"/>
+  <rect x="4" y="4" width="2" height="2" fill="#7a5210"/>
+  <!-- Alt Pirinç Köşe Koruyucu -->
+  <polygon points="2,94 14,94 14,91 5,91 5,82 2,82" fill="#dfa634"/>
+  <polygon points="2,94 12,94 12,93 3,93 3,84 2,84" fill="#fce278"/>
+  <rect x="4" y="90" width="2" height="2" fill="#7a5210"/>
+  <!-- Parşömen Etiket Kartı -->
+  <rect x="6" y="16" width="24" height="34" fill="#3a2818"/>
+  <rect x="7" y="17" width="22" height="32" fill="#fffbf0"/>
+  <rect x="7" y="17" width="22" height="5" fill="#9e2626"/>
+  <rect x="9" y="19" width="18" height="1" fill="#fce278"/>
+  <!-- Etiket Yazı İpuçları (Piksel Çizgiler) -->
+  <rect x="9" y="25" width="18" height="2" fill="#2b222a"/>
+  <rect x="9" y="29" width="14" height="2" fill="#555555"/>
+  <rect x="9" y="34" width="16" height="2" fill="#555555"/>
+  <rect x="9" y="39" width="10" height="2" fill="#777777"/>
+  <rect x="16" y="43" width="4" height="3" fill="#dfa634"/>
+  <!-- Metal Çekme Halkası -->
+  <rect x="13" y="66" width="10" height="10" fill="#221111" rx="2"/>
+  <rect x="14" y="67" width="8" height="8" fill="#dfa634" rx="1"/>
+  <rect x="15" y="68" width="6" height="6" fill="#1e0808" rx="1"/>
+  <rect x="15" y="68" width="2" height="2" fill="#fce278"/>
+</svg>

@@ -1,0 +1,67 @@
+<svg viewBox="0 0 56 112" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Üst Yaprak Kümesi (Yoğun yeşillik) -->
+  <!-- Koyu Gölgeler -->
+  <circle cx="28" cy="24" r="16" fill="#143d16"/>
+  <circle cx="18" cy="22" r="12" fill="#1b5e20"/>
+  <circle cx="38" cy="22" r="12" fill="#1b5e20"/>
+  <!-- Orta Ton Yapraklar -->
+  <circle cx="28" cy="20" r="14" fill="#2e7d32"/>
+  <circle cx="16" cy="18" r="10" fill="#388e3c"/>
+  <circle cx="40" cy="18" r="10" fill="#388e3c"/>
+  <!-- Işıklı Yapraklar -->
+  <circle cx="24" cy="14" r="8" fill="#4caf50"/>
+  <circle cx="34" cy="15" r="7" fill="#4caf50"/>
+  <circle cx="16" cy="12" r="6" fill="#66bb6a"/>
+  <circle cx="28" cy="10" r="6" fill="#81c784"/>
+  <!-- Piksel Yaprak Uçları -->
+  <rect x="10" y="8" width="4" height="4" fill="#81c784"/>
+  <rect x="26" y="4" width="5" height="4" fill="#a5d6a7"/>
+  <rect x="38" y="8" width="4" height="4" fill="#66bb6a"/>
+  <rect x="6" y="18" width="5" height="4" fill="#388e3c"/>
+  <rect x="46" y="18" width="5" height="4" fill="#388e3c"/>
+
+  <!-- Toprak -->
+  <ellipse cx="28" cy="38" rx="14" ry="4" fill="#2d170c"/>
+
+  <!-- Terakota Saksı -->
+  <!-- Saksı Kenarı (Bilezik) -->
+  <rect x="12" y="36" width="32" height="8" fill="#1e0b05" rx="1"/>
+  <rect x="13" y="37" width="30" height="6" fill="#c4643c"/>
+  <rect x="13" y="37" width="30" height="2" fill="#e07b53"/>
+  <rect x="14" y="38" width="10" height="1" fill="#f79c74"/>
+  <rect x="35" y="37" width="8" height="6" fill="#8c3e20"/>
+
+  <!-- Saksı Gövdesi (Aşağı doğru konik) -->
+  <polygon points="15,44 41,44 37,70 19,70" fill="#1e0b05"/>
+  <polygon points="16,45 40,45 36,69 20,69" fill="#c4643c"/>
+  <!-- Sol Işık Bandı -->
+  <polygon points="16,45 23,45 21,69 20,69" fill="#da754d"/>
+  <polygon points="17,46 20,46 19,68 18,68" fill="#f2956d"/>
+  <!-- Sağ Gölge Bandı -->
+  <polygon points="33,45 40,45 36,69 33,69" fill="#8c3e20"/>
+
+  <!-- Saksı Altlığı -->
+  <rect x="17" y="70" width="22" height="4" fill="#1e0b05"/>
+  <rect x="18" y="71" width="20" height="2" fill="#9e4420"/>
+
+  <!-- AŞAĞI SARKAN SARMAŞIK DALLARI & YAPRAKLARI -->
+  <!-- Sol Dal -->
+  <path d="M 16,42 Q 10,60 14,78 Q 18,94 11,106" stroke="#2e7d32" stroke-width="2" fill="none"/>
+  <!-- Sol Dal Yaprakları -->
+  <rect x="8" y="52" width="6" height="5" fill="#4caf50" rx="1"/>
+  <rect x="9" y="53" width="2" height="2" fill="#a5d6a7"/>
+  <rect x="13" y="66" width="6" height="5" fill="#388e3c" rx="1"/>
+  <rect x="6" y="80" width="7" height="6" fill="#4caf50" rx="1"/>
+  <rect x="7" y="81" width="3" height="2" fill="#81c784"/>
+  <rect x="14" y="92" width="6" height="5" fill="#2e7d32" rx="1"/>
+  <rect x="8" y="102" width="6" height="5" fill="#66bb6a" rx="1"/>
+
+  <!-- Sağ Dal (Daha kısa, zarif) -->
+  <path d="M 40,42 Q 46,58 42,76 Q 39,88 44,98" stroke="#1b5e20" stroke-width="2" fill="none"/>
+  <!-- Sağ Dal Yaprakları -->
+  <rect x="42" y="54" width="6" height="5" fill="#388e3c" rx="1"/>
+  <rect x="36" y="68" width="6" height="5" fill="#4caf50" rx="1"/>
+  <rect x="37" y="69" width="2" height="2" fill="#81c784"/>
+  <rect x="42" y="82" width="6" height="5" fill="#2e7d32" rx="1"/>
+  <rect x="41" y="94" width="5" height="5" fill="#66bb6a" rx="1"/>
+</svg>
