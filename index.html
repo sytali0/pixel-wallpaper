@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Room Desktop - Lively Wallpaper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ana Görünüm Kapsayıcısı (Ekran Oranını Korur) -->
+  <div class="viewport-wrapper">
+    
+    <!-- 16:9 Çalışma Sahnesi -->
+    <div class="stage-16-9" id="stage">
+      
+      <!-- Retro CRT / Scanline Tarama Çizgisi (Açılıp Kapatılabilir) -->
+      <div class="scanlines-overlay" id="scanlines"></div>
+
+      <!-- ====================================================================
+           1. İNTERAKTİF MEDYA ÇERÇEVESİ (DUVARDA SOL ÜST)
+           ==================================================================== -->
+      <div class="frame-container" id="media-frame" title="Resim veya Video yüklemek için tıklayın veya sürükleyin">
+        <input type="file" id="media-file-input" accept="image/png,image/jpeg,image/gif,image/webp,video/mp4,video/webm" style="display: none;">
+        
+        <div class="frame-media-wrapper" id="frame-media-wrapper">
+          <!-- Dinamik olarak JS tarafından img, video veya placeholder basılır -->
+          <div class="frame-placeholder" id="frame-placeholder">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+            </svg>
+            <span>MEDYA EKLE</span>
+            <small style="font-size: 0.45rem; opacity: 0.8;">[Tıkla veya Sürükle]</small>
+          </div>
+        </div>
+
+        <!-- Üzerine Gelindiğinde Çıkan Hızlı Kontroller -->
+        <div class="frame-controls" id="frame-controls">
+          <button class="frame-btn" id="btn-change-media" title="Medyayı Değiştir">DEĞİŞTİR</button>
+          <button class="frame-btn" id="btn-reset-media" title="Çerçeveyi Sıfırla">SIFIRLA</button>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           2. İNTERAKTİF MANTAR PANO / TO-DO LIST (DUVARDA SAĞ ÜST)
+           ==================================================================== -->
+      <div class="todo-container" id="todo-widget">
+        <!-- Kırmızı Raptiye İğnesi -->
+        <div class="todo-pin"></div>
+
+        <!-- Pano Başlığı ve Sayaç -->
+        <div class="todo-header">
+          <span class="todo-title">GÖREVLER</span>
+          <span class="todo-badge" id="todo-counter">0 / 0</span>
+        </div>
+
+        <!-- Yeni Görev Giriş Formu -->
+        <form class="todo-input-form" id="todo-form">
+          <input 
+            type="text" 
+            class="todo-input" 
+            id="todo-input" 
+            placeholder="Yeni görev yaz..." 
+            autocomplete="off" 
+            maxlength="50"
+          >
+          <button type="submit" class="todo-add-btn" title="Görev Ekle">+</button>
+        </form>
+
+        <!-- Görev Listesi -->
+        <ul class="todo-list" id="todo-list">
+          <!-- JavaScript ile dinamik olarak doldurulur -->
+        </ul>
+      </div>
+
+      <!-- ====================================================================
+           3. MASADAKİ DEFTERLER / KISAYOLLAR HOTSPOT (SOL ALT MASA)
+           ==================================================================== -->
+      <div class="notebook-hotspot" id="notebook-hotspot" title="Kısayolları ve Notları Aç">
+        <div class="notebook-tooltip">DEFTERLER / KISAYOLLAR</div>
+      </div>
+
+      <!-- ====================================================================
+           4. ÇÖP KUTUSU (MASA YANI - SAĞ ALT)
+           ==================================================================== -->
+      <div class="trash-hotspot" id="trash-hotspot" title="Tamamlanan Görevleri Temizle">
+        <div class="trash-badge" id="trash-badge">0</div>
+        <div class="trash-tooltip">TAMAMLANANLARI SİL</div>
+      </div>
+
+    </div> <!-- /stage-16-9 -->
+  </div> <!-- /viewport-wrapper -->
+
+  <!-- ====================================================================
+       5. RETRO MODAL PENCERE: DEFTER KISAYOLLARI
+       ==================================================================== -->
+  <div class="modal-overlay" id="notebook-modal">
+    <div class="pixel-window">
+      <div class="window-titlebar">
+        <span class="window-title">📂 ÇALIŞMA DEFTERİ & KISAYOLLAR</span>
+        <button class="window-close-btn" id="modal-close-btn" title="Kapat">X</button>
+      </div>
+      
+      <div class="window-body">
+        <!-- Kısayol Kartları Izgarası -->
+        <div class="shortcuts-grid" id="shortcuts-grid">
+          <!-- JS ile doldurulur -->
+        </div>
+
+        <!-- Yeni Kısayol Ekleme Bölümü -->
+        <div class="add-shortcut-section">
+          <div class="add-shortcut-title">+ YENİ KISAYOL EKLE</div>
+          <form class="shortcut-form" id="shortcut-form">
+            <input type="text" class="shortcut-input" id="shortcut-title" placeholder="Başlık (Örn: Figma)" required maxlength="20">
+            <input type="url" class="shortcut-input" id="shortcut-url" placeholder="URL (https://...)" required>
+            <button type="submit" class="shortcut-submit-btn">EKLE</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       6. HIZLI AYARLAR & ARAÇ ÇUBUĞU (SAĞ ALT KÖŞE)
+       ==================================================================== -->
+  <div class="control-dock">
+    <button class="dock-btn" id="btn-toggle-sound" title="Ses Efektlerini Aç/Kapat">🔊 SES</button>
+    <button class="dock-btn" id="btn-toggle-scanlines" title="CRT Scanline Efektini Aç/Kapat">📺 SCANLINE</button>
+    <button class="dock-btn" id="btn-toggle-calibrator" title="Koordinat Ayar Panelini Aç">⚙ KALİBRASYON</button>
+  </div>
+
+  <!-- ====================================================================
+       7. KOORDİNAT KALİBRASYON PANELİ (CANLI AYAR REHBERİ)
+       ==================================================================== -->
+  <div class="calibrator-panel" id="calibrator-panel">
+    <div class="calibrator-title">
+      <span>📐 KOORDİNAT KALİBRATÖRÜ</span>
+      <span style="cursor: pointer;" id="calibrator-close">[X]</span>
+    </div>
+    <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 8px;">
+      Arka plan görselinize tam oturması için yüzdeleri kaydırın:
+    </p>
+
+    <div class="calibrator-group">
+      <span class="calibrator-label">Çerçeve: Sol / Üst (%)</span>
+      <input type="range" class="calibrator-slider" id="cal-frame-x" min="0" max="100" step="0.5">
+      <input type="range" class="calibrator-slider" id="cal-frame-y" min="0" max="100" step="0.5">
+    </div>
+
+    <div class="calibrator-group">
+      <span class="calibrator-label">Mantar Pano: Sol / Üst (%)</span>
+      <input type="range" class="calibrator-slider" id="cal-todo-x" min="0" max="100" step="0.5">
+      <input type="range" class="calibrator-slider" id="cal-todo-y" min="0" max="100" step="0.5">
+    </div>
+
+    <div class="calibrator-group">
+      <span class="calibrator-label">Defterler: Sol / Üst (%)</span>
+      <input type="range" class="calibrator-slider" id="cal-book-x" min="0" max="100" step="0.5">
+      <input type="range" class="calibrator-slider" id="cal-book-y" min="0" max="100" step="0.5">
+    </div>
+
+    <div class="calibrator-group">
+      <span class="calibrator-label">Çöp Kutusu: Sol / Üst (%)</span>
+      <input type="range" class="calibrator-slider" id="cal-trash-x" min="0" max="100" step="0.5">
+      <input type="range" class="calibrator-slider" id="cal-trash-y" min="0" max="100" step="0.5">
+    </div>
+
+    <button class="dock-btn" id="btn-copy-css" style="width: 100%; margin-top: 6px; padding: 6px;">
+      📋 CSS KODLARINI KOPYALA
+    </button>
+  </div>
+
+  <!-- Toast Bildirim Taşıyıcısı -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Uygulama Betiği -->
+  <script src="app.js"></script>
+</body>
+</html>
