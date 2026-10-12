@@ -94,6 +94,17 @@
             osc.stop(now + 0.18);
             break;
 
+          case 'slide':
+            // Raf klasörü çekme sesi (retro kağıt/karton sürtünmesi)
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(280, now);
+            osc.frequency.linearRampToValueAtTime(520, now + 0.08);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.start(now);
+            osc.stop(now + 0.12);
+            break;
+
           case 'delete':
             // Tekil silme sesi
             osc.type = 'square';
@@ -715,7 +726,305 @@
   }
 
   /* ==========================================================================
-     8. KOORDİNAT KALİBRATÖRÜ VE CANLI AYAR PANELİ
+     8. DUVAR RAFI VE PİKSEL KLASÖRLER YÖNETİCİSİ (SHELF & BINDERS)
+     ========================================================================== */
+  class ShelfManager {
+    constructor(soundEngine) {
+      this.sound = soundEngine;
+      this.storageKey = 'pixel_shelf_folders';
+      this.folders = this.loadFolders();
+      this.activeFolderId = null;
+
+      this.wrapper = document.getElementById('shelf-binders-wrapper');
+      
+      // Klasör İçeriği Modalı
+      this.modal = document.getElementById('folder-modal');
+      this.modalTitle = document.getElementById('folder-modal-title');
+      this.modalClose = document.getElementById('folder-modal-close-btn');
+      this.itemsGrid = document.getElementById('folder-items-grid');
+      this.itemForm = document.getElementById('folder-item-form');
+      this.itemTitleInput = document.getElementById('folder-item-title');
+      this.itemUrlInput = document.getElementById('folder-item-url');
+      this.btnDeleteFolder = document.getElementById('btn-delete-folder');
+
+      // Yeni Klasör Ekleme Modalı
+      this.addModal = document.getElementById('add-binder-modal');
+      this.addModalClose = document.getElementById('add-binder-close-btn');
+      this.newBinderForm = document.getElementById('new-binder-form');
+      this.newBinderName = document.getElementById('new-binder-name');
+      this.newBinderColor = document.getElementById('new-binder-color');
+
+      this.init();
+    }
+
+    init() {
+      // Modal Kapatma Olayları
+      this.modalClose.addEventListener('click', () => this.closeFolderModal());
+      this.modal.addEventListener('click', (e) => {
+        if (e.target === this.modal) this.closeFolderModal();
+      });
+
+      this.addModalClose.addEventListener('click', () => this.closeAddModal());
+      this.addModal.addEventListener('click', (e) => {
+        if (e.target === this.addModal) this.closeAddModal();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.closeFolderModal();
+          this.closeAddModal();
+        }
+      });
+
+      // Klasöre Yeni Bağlantı Ekleme
+      this.itemForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = this.itemTitleInput.value.trim();
+        let url = this.itemUrlInput.value.trim();
+        if (title && url && this.activeFolderId) {
+          if (!/^https?:\/\//i.test(url)) {
+            url = 'https://' + url;
+          }
+          this.addItemToFolder(this.activeFolderId, title, url);
+          this.itemTitleInput.value = '';
+          this.itemUrlInput.value = '';
+        }
+      });
+
+      // Klasörü Silme Butonu
+      this.btnDeleteFolder.addEventListener('click', () => {
+        if (this.activeFolderId) {
+          this.deleteFolder(this.activeFolderId);
+          this.closeFolderModal();
+        }
+      });
+
+      // Rafa Yeni Klasör Ekleme Formu
+      this.newBinderForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = this.newBinderName.value.trim().toUpperCase();
+        const color = this.newBinderColor.value;
+        if (name) {
+          this.addFolder(name, color);
+          this.newBinderName.value = '';
+          this.closeAddModal();
+        }
+      });
+
+      this.renderShelf();
+    }
+
+    loadFolders() {
+      try {
+        const data = localStorage.getItem(this.storageKey);
+        return data ? JSON.parse(data) : [
+          {
+            id: 1,
+            name: 'PROJELER',
+            color: 'col-red',
+            items: [
+              { id: 101, title: 'GitHub', url: 'https://github.com' },
+              { id: 102, title: 'Vercel', url: 'https://vercel.com' },
+              { id: 103, title: 'Figma', url: 'https://figma.com' }
+            ]
+          },
+          {
+            id: 2,
+            name: 'DERSLER',
+            color: 'col-blue',
+            items: [
+              { id: 201, title: 'MDN Web Docs', url: 'https://developer.mozilla.org' },
+              { id: 202, title: 'Stack Overflow', url: 'https://stackoverflow.com' }
+            ]
+          },
+          {
+            id: 3,
+            name: 'NOTLAR',
+            color: 'col-green',
+            items: [
+              { id: 301, title: 'Google Keep', url: 'https://keep.google.com' },
+              { id: 302, title: 'Notion', url: 'https://notion.so' }
+            ]
+          },
+          {
+            id: 4,
+            name: 'MEDYA',
+            color: 'col-yellow',
+            items: [
+              { id: 401, title: 'YouTube Lofi', url: 'https://youtube.com' },
+              { id: 402, title: 'Spotify', url: 'https://open.spotify.com' }
+            ]
+          }
+        ];
+      } catch (err) {
+        return [];
+      }
+    }
+
+    saveFolders() {
+      try {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.folders));
+      } catch (err) {
+        console.error('Klasörler kaydedilemedi:', err);
+      }
+      this.renderShelf();
+    }
+
+    renderShelf() {
+      if (!this.wrapper) return;
+      this.wrapper.innerHTML = '';
+
+      this.folders.forEach(folder => {
+        const binder = document.createElement('div');
+        binder.className = `pixel-binder ${folder.color || 'col-red'}`;
+        binder.title = `${folder.name} (${folder.items ? folder.items.length : 0} öğe)`;
+
+        binder.innerHTML = `
+          <div class="binder-label-tag">
+            <span class="binder-label-text">${folder.name}</span>
+          </div>
+          <div class="binder-ring"></div>
+          <div class="binder-tooltip">📁 ${folder.name} (${folder.items ? folder.items.length : 0})</div>
+        `;
+
+        binder.addEventListener('click', () => {
+          this.sound.play('slide');
+          this.openFolder(folder.id);
+        });
+
+        this.wrapper.appendChild(binder);
+      });
+
+      // + Yeni Klasör Ekle Butonu
+      const btnAdd = document.createElement('div');
+      btnAdd.className = 'shelf-add-binder-btn';
+      btnAdd.title = 'Rafa Yeni Klasör Ekle';
+      btnAdd.textContent = '+';
+      btnAdd.addEventListener('click', () => {
+        this.sound.play('blip');
+        this.openAddModal();
+      });
+      this.wrapper.appendChild(btnAdd);
+    }
+
+    openFolder(folderId) {
+      const folder = this.folders.find(f => f.id === folderId);
+      if (!folder) return;
+      this.activeFolderId = folderId;
+
+      this.modalTitle.textContent = `📁 KLASÖR: ${folder.name} (${folder.items ? folder.items.length : 0})`;
+      this.renderFolderItems();
+      this.modal.classList.add('active');
+    }
+
+    closeFolderModal() {
+      this.modal.classList.remove('active');
+      this.activeFolderId = null;
+    }
+
+    openAddModal() {
+      this.addModal.classList.add('active');
+    }
+
+    closeAddModal() {
+      this.addModal.classList.remove('active');
+    }
+
+    renderFolderItems() {
+      const folder = this.folders.find(f => f.id === this.activeFolderId);
+      if (!folder) return;
+
+      this.itemsGrid.innerHTML = '';
+
+      if (!folder.items || folder.items.length === 0) {
+        this.itemsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #777; font-style: italic; padding: 12px 0;">Bu klasör henüz boş...</div>';
+        return;
+      }
+
+      folder.items.forEach(item => {
+        const card = document.createElement('a');
+        card.className = 'shortcut-card';
+        card.href = item.url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+
+        card.innerHTML = `
+          <div class="shortcut-icon">📄</div>
+          <div class="shortcut-info">
+            <span class="shortcut-name">${item.title}</span>
+            <span class="shortcut-desc">${item.url.replace(/^https?:\/\//i, '').slice(0, 22)}</span>
+          </div>
+        `;
+
+        const btnDel = document.createElement('button');
+        btnDel.className = 'shortcut-delete-btn';
+        btnDel.textContent = '✕';
+        btnDel.title = 'Öğeyi Sil';
+        btnDel.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.deleteItemFromFolder(this.activeFolderId, item.id);
+        });
+
+        card.appendChild(btnDel);
+        this.itemsGrid.appendChild(card);
+      });
+    }
+
+    addItemToFolder(folderId, title, url) {
+      const folder = this.folders.find(f => f.id === folderId);
+      if (!folder) return;
+      if (!folder.items) folder.items = [];
+
+      folder.items.push({
+        id: Date.now(),
+        title: title,
+        url: url
+      });
+
+      this.saveFolders();
+      this.renderFolderItems();
+      this.modalTitle.textContent = `📁 KLASÖR: ${folder.name} (${folder.items.length})`;
+      this.sound.play('add');
+      ToastManager.show('Öğe klasöre eklendi!');
+    }
+
+    deleteItemFromFolder(folderId, itemId) {
+      const folder = this.folders.find(f => f.id === folderId);
+      if (!folder || !folder.items) return;
+
+      folder.items = folder.items.filter(i => i.id !== itemId);
+      this.saveFolders();
+      this.renderFolderItems();
+      this.modalTitle.textContent = `📁 KLASÖR: ${folder.name} (${folder.items.length})`;
+      this.sound.play('delete');
+    }
+
+    addFolder(name, color) {
+      const newFolder = {
+        id: Date.now(),
+        name: name,
+        color: color || 'col-red',
+        items: []
+      };
+      this.folders.push(newFolder);
+      this.saveFolders();
+      this.sound.play('done');
+      ToastManager.show(`"${name}" klasörü rafa kondu!`);
+    }
+
+    deleteFolder(folderId) {
+      const folder = this.folders.find(f => f.id === folderId);
+      const name = folder ? folder.name : '';
+      this.folders = this.folders.filter(f => f.id !== folderId);
+      this.saveFolders();
+      this.sound.play('trash');
+      ToastManager.show(`"${name}" klasörü raftan kaldırıldı.`);
+    }
+  }
+
+  /* ==========================================================================
+     9. KOORDİNAT KALİBRATÖRÜ VE CANLI AYAR PANELİ
      ========================================================================== */
   class CalibratorManager {
     constructor(soundEngine) {
@@ -730,6 +1039,8 @@
         '--frame-top': document.getElementById('cal-frame-y'),
         '--todo-left': document.getElementById('cal-todo-x'),
         '--todo-top': document.getElementById('cal-todo-y'),
+        '--shelf-left': document.getElementById('cal-shelf-x'),
+        '--shelf-top': document.getElementById('cal-shelf-y'),
         '--notebook-left': document.getElementById('cal-book-x'),
         '--notebook-top': document.getElementById('cal-book-y'),
         '--trash-left': document.getElementById('cal-trash-x'),
@@ -775,6 +1086,11 @@
   --todo-width: ${rootStyles.getPropertyValue('--todo-width').trim()};
   --todo-height: ${rootStyles.getPropertyValue('--todo-height').trim()};
 
+  --shelf-top: ${rootStyles.getPropertyValue('--shelf-top').trim()};
+  --shelf-left: ${rootStyles.getPropertyValue('--shelf-left').trim()};
+  --shelf-width: ${rootStyles.getPropertyValue('--shelf-width').trim()};
+  --shelf-height: ${rootStyles.getPropertyValue('--shelf-height').trim()};
+
   --notebook-top: ${rootStyles.getPropertyValue('--notebook-top').trim()};
   --notebook-left: ${rootStyles.getPropertyValue('--notebook-left').trim()};
   --notebook-width: ${rootStyles.getPropertyValue('--notebook-width').trim()};
@@ -808,7 +1124,7 @@
   }
 
   /* ==========================================================================
-     9. HIZLI AYARLAR DOCK (SES & SCANLINE)
+     10. HIZLI AYARLAR DOCK (SES & SCANLINE)
      ========================================================================== */
   function setupDock(soundEngine) {
     const btnSound = document.getElementById('btn-toggle-sound');
@@ -847,7 +1163,7 @@
   }
 
   /* ==========================================================================
-     10. UYGULAMA BAŞLATICI (INITIALIZATION)
+     11. UYGULAMA BAŞLATICI (INITIALIZATION)
      ========================================================================== */
   document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -856,6 +1172,7 @@
       await mediaManager.init();
 
       const todoManager = new TodoManager(soundEngine);
+      new ShelfManager(soundEngine);
       new NotebookManager(soundEngine);
       new TrashController(todoManager, soundEngine);
       new CalibratorManager(soundEngine);

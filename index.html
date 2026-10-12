@@ -74,14 +74,28 @@
       </div>
 
       <!-- ====================================================================
-           3. MASADAKİ DEFTERLER / KISAYOLLAR HOTSPOT (SOL ALT MASA)
+           3. DUVAR RAFI VE KLASÖRLER (MANTAR PANO ALTI)
+           ==================================================================== -->
+      <div class="shelf-container" id="shelf-container">
+        <div class="shelf-binders-wrapper" id="shelf-binders-wrapper">
+          <!-- Dinamik olarak JS tarafından piksel klasörler dizilir -->
+        </div>
+        <!-- Ahşap Raf Tahtası ve Destek Ayakları -->
+        <div class="shelf-board">
+          <div class="shelf-bracket left"></div>
+          <div class="shelf-bracket right"></div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           4. MASADAKİ DEFTERLER / KISAYOLLAR HOTSPOT (SOL ALT MASA)
            ==================================================================== -->
       <div class="notebook-hotspot" id="notebook-hotspot" title="Kısayolları ve Notları Aç">
         <div class="notebook-tooltip">DEFTERLER / KISAYOLLAR</div>
       </div>
 
       <!-- ====================================================================
-           4. ÇÖP KUTUSU (MASA YANI - SAĞ ALT)
+           5. ÇÖP KUTUSU (MASA YANI - SAĞ ALT)
            ==================================================================== -->
       <div class="trash-hotspot" id="trash-hotspot" title="Tamamlanan Görevleri Temizle">
         <div class="trash-badge" id="trash-badge">0</div>
@@ -121,7 +135,69 @@
   </div>
 
   <!-- ====================================================================
-       6. HIZLI AYARLAR & ARAÇ ÇUBUĞU (SAĞ ALT KÖŞE)
+       RETRO MODAL PENCERE: KLASÖR İÇERİĞİ VE YÖNETİMİ
+       ==================================================================== -->
+  <div class="modal-overlay" id="folder-modal">
+    <div class="pixel-window">
+      <div class="window-titlebar">
+        <span class="window-title" id="folder-modal-title">📁 KLASÖR İÇERİĞİ</span>
+        <button class="window-close-btn" id="folder-modal-close-btn" title="Kapat">X</button>
+      </div>
+      
+      <div class="window-body">
+        <div class="shortcuts-grid" id="folder-items-grid">
+          <!-- JS ile klasörün içindeki öğeler doldurulur -->
+        </div>
+
+        <div class="add-shortcut-section">
+          <div class="add-shortcut-title">+ BU KLASÖRE YENİ BAĞLANTI EKLE</div>
+          <form class="shortcut-form" id="folder-item-form">
+            <input type="text" class="shortcut-input" id="folder-item-title" placeholder="Başlık (Örn: Proje Deposu)" required maxlength="25">
+            <input type="url" class="shortcut-input" id="folder-item-url" placeholder="URL (https://...)" required>
+            <button type="submit" class="shortcut-submit-btn">EKLE</button>
+          </form>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 12px; border-top: 1px dashed #aaa; padding-top: 8px;">
+          <button class="dock-btn" id="btn-delete-folder" style="background: #9e2a2b; color: #fff;">🗑️ BU KLASÖRÜ SİL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       RETRO MODAL: RAFA YENİ KLASÖR EKLEME
+       ==================================================================== -->
+  <div class="modal-overlay" id="add-binder-modal">
+    <div class="pixel-window" style="max-width: 420px;">
+      <div class="window-titlebar">
+        <span class="window-title">📚 RAFA YENİ KLASÖR KOY</span>
+        <button class="window-close-btn" id="add-binder-close-btn" title="Kapat">X</button>
+      </div>
+      <div class="window-body">
+        <form class="shortcut-form" id="new-binder-form" style="flex-direction: column; gap: 8px;">
+          <div>
+            <label style="font-family: var(--font-pixel); font-size: 0.55rem; display: block; margin-bottom: 4px;">KLASÖR ADI:</label>
+            <input type="text" class="shortcut-input" id="new-binder-name" placeholder="Örn: ARŞİV" required maxlength="12" style="width: 100%;">
+          </div>
+          <div>
+            <label style="font-family: var(--font-pixel); font-size: 0.55rem; display: block; margin-bottom: 4px;">KLASÖR RENGİ:</label>
+            <select id="new-binder-color" class="shortcut-input" style="width: 100%; height: 32px; font-family: var(--font-retro);">
+              <option value="col-red">🔴 Bordo / Kırmızı</option>
+              <option value="col-blue">🔵 Klasik Mavi</option>
+              <option value="col-green">🟢 Zeytin Yeşili</option>
+              <option value="col-yellow">🟡 Hardal Sarısı</option>
+              <option value="col-purple">🟣 Mor / Mürdüm</option>
+            </select>
+          </div>
+          <button type="submit" class="shortcut-submit-btn" style="width: 100%; padding: 8px; margin-top: 4px;">RAFA KOY</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       HIZLI AYARLAR & ARAÇ ÇUBUĞU (SAĞ ALT KÖŞE)
        ==================================================================== -->
   <div class="control-dock">
     <button class="dock-btn" id="btn-toggle-sound" title="Ses Efektlerini Aç/Kapat">🔊 SES</button>
@@ -130,7 +206,7 @@
   </div>
 
   <!-- ====================================================================
-       7. KOORDİNAT KALİBRASYON PANELİ (CANLI AYAR REHBERİ)
+       KOORDİNAT KALİBRASYON PANELİ (CANLI AYAR REHBERİ)
        ==================================================================== -->
   <div class="calibrator-panel" id="calibrator-panel">
     <div class="calibrator-title">
@@ -151,6 +227,12 @@
       <span class="calibrator-label">Mantar Pano: Sol / Üst (%)</span>
       <input type="range" class="calibrator-slider" id="cal-todo-x" min="0" max="100" step="0.5">
       <input type="range" class="calibrator-slider" id="cal-todo-y" min="0" max="100" step="0.5">
+    </div>
+
+    <div class="calibrator-group">
+      <span class="calibrator-label">Duvar Rafı: Sol / Üst (%)</span>
+      <input type="range" class="calibrator-slider" id="cal-shelf-x" min="0" max="100" step="0.5">
+      <input type="range" class="calibrator-slider" id="cal-shelf-y" min="0" max="100" step="0.5">
     </div>
 
     <div class="calibrator-group">

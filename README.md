@@ -18,21 +18,28 @@ Windows Lively Wallpaper veya tam ekran web tarayıcıları için tasarlanmış,
    - **LocalStorage Kalıcılığı**: Görevleriniz hiçbir zaman kaybolmaz.
    - Özel piksel kaydırma çubuğu (custom pixel scrollbar).
 
-3. **Masadaki Defterler / Kısayollar (Masa Sol Bölümü)**
+3. **Duvar Rafı ve Piksel Klasörler (Mantar Pano Altı)**
+   - Odanın ahşap duvarına tam oturan piksel ahşap raf ve metal destek ayakları.
+   - Gerçekçi ciltli retro klasörler (PROJELER, DERSLER, NOTLAR, MEDYA).
+   - Klasörün üzerine gelindiğinde raftan öne doğru çekilme animasyonu ve retro kağıt sürtünme sesi.
+   - Tıklandığında klasörün içindeki bağlantıları ve dosyaları listeleyen özel modal pencere.
+   - Kullanıcı dilediği renkte (bordo, mavi, yeşil, sarı, mor) yeni klasör ekleyebilir ve bağlantılarını düzenleyebilir.
+
+4. **Masadaki Defterler / Kısayollar (Masa Sol Bölümü)**
    - Tıklandığında retro işletim sistemi penceresi (modal) açılır.
    - Hızlı bağlantılar (GitHub, Notlar, Dokümanlar, Lo-Fi Müzik vb.).
    - Kullanıcının kendi web bağlantılarını ekleyip silebileceği dinamik kısayol sistemi.
 
-4. **Çöp Kutusu (Masa Yanı - Sağ Alt)**
+5. **Çöp Kutusu (Masa Yanı - Sağ Alt)**
    - Tıklandığında piksel sarsıntı animasyonu (`pixel-shake`).
    - Tek tıkla mantar panodaki **tamamlanmış tüm görevleri temizler**.
    - Üzerinde kaç adet tamamlanmış görev olduğunu gösteren retro sayaç rozeti.
 
-5. **Retro 8-Bit Ses Motoru (Web Audio API)**
+6. **Retro 8-Bit Ses Motoru (Web Audio API)**
    - Harici ses dosyası yüklemeden, tarayıcının kendi ses sentezleyicisi ile retro chiptune tınıları üretir (0 KB bant genişliği, ultra hafif).
    - Sağ alttaki dock menüsünden ses tek tıkla açılıp kapatılabilir.
 
-6. **Canlı Koordinat Kalibratörü (Görsel Ayar Aracı)**
+7. **Canlı Koordinat Kalibratörü (Görsel Ayar Aracı)**
    - Sağ alt dock menüsündeki `⚙ KALİBRASYON` butonu ile açılır.
    - Kendi özel `background.png` görselinizi kullandığınızda, bileşenlerin konumlarını gerçek zamanlı slider'lar ile ayarlayabilir ve hazır CSS kodunu panoya kopyalayabilirsiniz.
 
@@ -75,13 +82,19 @@ Kendi arka planınızı kullanmak isterseniz:
   --todo-width: 22.5%;
   --todo-height: 32.5%;
 
-  /* 3. Masadaki Defterler */
+  /* 3. Duvar Rafı ve Klasörler */
+  --shelf-top: 48.0%;
+  --shelf-left: 72.5%;
+  --shelf-width: 23.5%;
+  --shelf-height: 16.0%;
+
+  /* 4. Masadaki Defterler */
   --notebook-top: 74.0%;
   --notebook-left: 7.8%;
   --notebook-width: 16.5%;
   --notebook-height: 20.0%;
 
-  /* 4. Çöp Kutusu */
+  /* 5. Çöp Kutusu */
   --trash-top: 84.5%;
   --trash-left: 68.5%;
   --trash-width: 11.5%;
