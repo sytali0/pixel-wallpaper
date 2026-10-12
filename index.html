@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixel Room Desktop - Lively Wallpaper</title>
-  <link rel="stylesheet" href="style.css?v=4.0">
+  <link rel="stylesheet" href="style.css?v=4.1">
 </head>
 <body>
 
@@ -292,6 +292,15 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Uygulama Betiği -->
-  <script src="app.js?v=4.0"></script>
+  <script src="app.js?v=4.1"></script>
+
+  <!-- Çevrimdışı (Offline PWA) Desteği -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>

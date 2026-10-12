@@ -4,8 +4,24 @@
    1920x1080 (16:9) Pixel Perfect Responsive Layout
    ========================================================================== */
 
-/* --- GOOGLE FONTS IMPORT --- */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+/* --- RETRO PİKSEL FONTLAR (ÇEVRİMDIŞI & ÇEVRİMİÇİ DESTEK) --- */
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/press-start-2p.ttf') format('truetype'),
+       url('https://fonts.gstatic.com/s/pressstart2p/v16/e3t4euO8T-267oIAQAu6jDQyK0nS.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/vt323.ttf') format('truetype'),
+       url('https://fonts.gstatic.com/s/vt323/v18/pxiKyp0ihIEF2hsY.ttf') format('truetype');
+}
 
 /* --- CSS DEĞİŞKENLERİ (KOORDİNAT VE BOYUTLAR) ---
    Arka plan görselinize göre bu yüzdeleri dilediğiniz gibi güncelleyebilirsiniz.
